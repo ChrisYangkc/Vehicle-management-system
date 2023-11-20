@@ -21,11 +21,16 @@ def process_image(image_path, output_path):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     _, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 
-    # 边缘检测
-    edges = cv2.Canny(binary, 100, 200)
+    # 边缘检测 - 使用Canny和Sobel算子
+    edges_canny = cv2.Canny(binary, 100, 200)
+    sobelx = cv2.Sobel(binary, cv2.CV_64F, 1, 0, ksize=3)
+    sobely = cv2.Sobel(binary, cv2.CV_64F, 0, 1, ksize=3)
+    edges_sobel = cv2.magnitude(sobelx, sobely)
+    edges = cv2.bitwise_or(edges_canny, np.uint8(edges_sobel))
 
-    # 图像增强（这里只是简单地应用了一个高斯模糊）
-    enhanced = cv2.GaussianBlur(edges, (5, 5), 0)
+    # 图像增强 - 直方图均衡化和高斯模糊
+    equalized = cv2.equalizeHist(np.uint8(edges))
+    enhanced = cv2.GaussianBlur(equalized, (5, 5), 0)
 
     # 背景消除（示例中暂不实现具体的背景消除方法）
     # 通常背景消除需要特定的算法或条件，这里留作未实现
