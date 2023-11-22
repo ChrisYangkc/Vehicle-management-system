@@ -1,133 +1,107 @@
-import os
-import numpy as np
+import tensorflow as tf
 import cv2
-import random
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Activation, Dropout, Flatten, Dense, Reshape
-from tensorflow.keras.utils import to_categorical
+import numpy as np
+import os
 
-# 图像预处理参数
-IMG_SIZE = (32, 32)
-
-# 省份和字母数字映射字典
-province_dict = {
-    0: "皖", 1: "沪", 2: "津", 3: "渝", 4: "冀", 5: "晋", 6: "蒙",
-    7: "辽", 8: "吉", 9: "黑", 10: "苏", 11: "浙", 12: "京", 13: "闽",
-    14: "赣", 15: "鲁", 16: "豫", 17: "鄂", 18: "湘", 19: "粤", 20: "桂",
-    21: "琼", 22: "川", 23: "贵", 24: "云", 25: "藏", 26: "陕", 27: "甘",
-    28: "青", 29: "宁", 30: "新"
-}
-
-ads_dict = {
-    0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F", 6: "G", 7: "H",
-    8: "J", 9: "K", 10: "L", 11: "M", 12: "N", 13: "P", 14: "Q", 15: "R",
-    16: "S", 17: "T", 18: "U", 19: "V", 20: "W", 21: "X", 22: "Y", 23: "Z",
-    24: "0", 25: "1", 26: "2", 27: "3", 28: "4", 29: "5", 30: "6", 31: "7",
-    32: "8", 33: "9"
-}
-
-# 图像预处理函数
-def load_image(image_path):
-    image = cv2.imread(image_path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+def load_and_preprocess_image(path, target_size=(128, 48)):
+    # 读取图像
+    image = cv2.imread(path)
+    # 裁剪和缩放
+    image = cv2.resize(image, target_size)
+    # 转换为灰度图像
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # 应用高斯滤波
+    image = cv2.GaussianBlur(image, (5, 5), 0)
+    # 边缘检测
+    image = cv2.Canny(image, 100, 200)
+    # 二值化处理
+    _, image = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY)
+    # 形态学处理
+    kernel = np.ones((3,3), np.uint8)
+    image = cv2.dilate(image, kernel, iterations=1)
+    image = cv2.erode(image, kernel, iterations=1)
+    # 转换为网络输入所需的形状
+    image = np.expand_dims(image, axis=-1)
     return image
 
-def parse_filename(filename):
-    parts = filename.split('-')
-    # 提取倾斜角度、边界框和车牌号码
-    angles = parts[1].split('_')
-    bbox_coords = parts[2].split('_')
-    plate_coords = parts[3].split('_')
-    license_plate_numbers = [int(n) for n in parts[4].split('_')]
+# 创建字符到索引的映射
+# 假设这是您需要识别的中文字符集
+chinese_chars = '京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼'
 
-    # 将提取的数据转换为需要的格式
-    bbox = [int(x) for x in bbox_coords[0].split('&')] + [int(x) for x in bbox_coords[1].split('&')]
-    plate_points = [tuple(map(int, coord.split('&'))) for coord in plate_coords]
+max_length = 7  # 车牌最大长度
+num_characters = 75  # 字符集大小，包括中文、英文字符和数字
 
-    return angles, bbox, plate_points, license_plate_numbers
+# 更新字符映射以包括填充字符
+char_to_idx = {char: i for i, char in enumerate('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789' + chinese_chars + '-' + '学挂澳使领港临')}
+num_characters = len(char_to_idx)
 
-def crop_and_resize(image, size=IMG_SIZE):
-    resized_image = cv2.resize(image, size)
-    return resized_image
+# 使用更新后的映射来转换标签
+def label_to_array(label):
+    return [char_to_idx[char] for char in label]
 
-def complete_preprocess(image_path):
-    image = load_image(image_path)
-    gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    processed_image = crop_and_resize(gray_image)
-    return processed_image
+# 修改 load_data 函数来处理标签
+def load_data(file_path):
+    images = []
+    labels = []
+    with open(file_path, 'r', encoding='utf-8') as file:
+        for line in file:
+            parts = line.strip().split(' ')
+            image_path = os.path.join('E:/licence/CBLPRD-330k_v1', parts[0])
+            label = parts[1]  # 确保这是一个字符串
+            image = load_and_preprocess_image(image_path)
+            images.append(image)
+            labels.append(label)
+    return np.array(images), labels  # 仅对images使用np.array
 
-# 标签编码函数
-def encode_label(label):
-    encoded = []
-    # 省份
-    encoded.append(label[0])
-    # 字母和数字
-    for num in label[1:]:
-        encoded.append(num)
-    return encoded
+def standardize_label(label):
+    # 如果label是数字列表，转换为字符列表
+    if isinstance(label, list) and all(isinstance(item, int) for item in label):
+        label = [str(item) for item in label]
 
-# 数据集加载和处理
-dataset_dir = "E:/licence/ccpd_base"  # 替换为实际路径
-images = []
-labels = []
+    # 如果label不是字符串，转换为字符串
+    if not isinstance(label, str):
+        label = ''.join(label)
 
-for filename in os.listdir(dataset_dir):
-    filepath = os.path.join(dataset_dir, filename)
-    image = complete_preprocess(filepath)
-    angles, bbox, plate_points, license_plate_numbers = parse_filename(filename)
-    encoded_label = encode_label(license_plate_numbers)
-    
-    images.append(image)
-    labels.append(encoded_label)
+    # 标准化长度
+    if len(label) > max_length:
+        label = label[:max_length]  # 截断超出长度的部分
+    else:
+        label += '-' * (max_length - len(label))  # 使用'-'填充剩余部分
 
-images = np.array(images).reshape(-1, 32, 32, 1)  # 重塑为适合CNN的格式
-labels = np.array(labels)
+    # 分别对每个字符进行独热编码
+    one_hot_label = np.zeros((max_length, num_characters))
+    for i, char in enumerate(label):
+        index = char_to_idx[char]
+        one_hot_label[i, index] = 1
+    return one_hot_label
 
-# 独热编码
-num_classes = 34
-encoded_labels = [to_categorical(label, num_classes=num_classes) for label in labels]
-encoded_labels = np.array(encoded_labels)
+# 在转换标签为独热编码之前，确保所有标签都是字符串
+train_images, train_labels = load_data('E:/licence/CBLPRD-330k_v1/train.txt')
+train_labels = np.array([standardize_label(label) for label in train_labels])
 
-# 随机选取三张图片作为测试样本
-test_sample_size = 3
-test_indices = random.sample(range(len(images)), test_sample_size)
+val_images, val_labels = load_data('E:/licence/CBLPRD-330k_v1/val.txt')
+val_labels = np.array([standardize_label(label) for label in val_labels])
 
-test_images = np.array([images[i] for i in test_indices]).reshape(-1, 32, 32, 1)
-test_labels = np.array([encoded_labels[i] for i in test_indices])
-
-# 移除选中的测试样本，剩下的作为训练集
-train_images = np.delete(images, test_indices, axis=0)
-train_labels = np.delete(encoded_labels, test_indices, axis=0)
-
-# CNN模型构建
-model = Sequential([
-    Conv2D(32, (3, 3), input_shape=(32, 32, 1)),
-    Activation('relu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Conv2D(32, (3, 3)),
-    Activation('relu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Conv2D(64, (3, 3)),
-    Activation('relu'),
-    MaxPooling2D(pool_size=(2, 2)),
-    Flatten(),
-    Dense(64),
-    Activation('relu'),
-    Dropout(0.5),
-    Dense(num_classes * 7),  # 假设车牌有7个字符
-    Reshape((7, num_classes)),
-    Activation('softmax')
+model = tf.keras.models.Sequential([
+    # 第一层卷积层
+    tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(128, 48, 1)),
+    tf.keras.layers.MaxPooling2D(2, 2),
+    # 第二层卷积层
+    tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    # 将卷积层的输出展平
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dense(max_length * num_characters, activation='softmax'),
+    tf.keras.layers.Reshape((max_length, num_characters))  # 添加Reshape层
 ])
 
-# 编译模型
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # 训练模型
-model.fit(train_images, train_labels, batch_size=32, epochs=100, validation_split=0.1)
+model.fit(train_images, train_labels, epochs=10)
 
-# 测试模型并输出结果
-test_predictions = model.predict(test_images)
-
-for i in range(test_sample_size):
-    print("真实标签:", np.argmax(test_labels[i], axis=1))
-    print("预测标签:", np.argmax(test_predictions[i], axis=1))
+# 评估模型
+val_loss, val_accuracy = model.evaluate(val_images, val_labels)
+print("Validation loss:", val_loss)
+print("Validation accuracy:", val_accuracy)
