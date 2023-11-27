@@ -100,6 +100,6 @@ def translate(path, save_path):
 
 if __name__ == '__main__':
     # 指定图片和XML文件的存储路径
-    img_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/train/JPEGImages"  # 设置源图片的路径。这里使用的是相对路径，指向当前脚本所在目录的上级目录下的ccpd_data文件夹。
-    save_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/train/Annotations"  # 设置XML文件的保存路径。这是一个绝对路径，指向一个具体的目录。
+    img_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/test/JPEGImages"  # 设置源图片的路径。这里使用的是相对路径，指向当前脚本所在目录的上级目录下的ccpd_data文件夹。
+    save_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/test/Annotations"  # 设置XML文件的保存路径。这是一个绝对路径，指向一个具体的目录。
     translate(img_path, save_path)  # 调用translate函数，传入之前定义的源图片路径和XML保存路径。
