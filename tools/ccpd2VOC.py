@@ -4,7 +4,6 @@ import os
 
 from lxml import etree
 
-
 # 定义labelimg_Annotations_xml类，用于创建XML文件结构
 class labelimg_Annotations_xml:
     # 构造函数，初始化XML根节点
@@ -15,7 +14,7 @@ class labelimg_Annotations_xml:
         child2 = etree.SubElement(self.root, "filename")  # 创建filename子标签
         child2.text = filename  # 设置filename标签的文本
         # 注释掉path标签的创建，因为在此例中未使用
-        # child4 = etree.SubElement(self.root, "source")  # 创建source子标签
+        child4 = etree.SubElement(self.root, "source")  # 创建source子标签
         child5 = etree.SubElement(child4, "database")  # 创建database子标签
         child5.text = database  # 设置database标签的文本
 
