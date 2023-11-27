@@ -68,15 +68,15 @@ def write_txt(img_path, ann_path, classes_path, txt_path):
 
 if __name__ == "__main__":
     # 训练集
-    img_path_train = r'.\traindata\train\JPEGImages'
-    ann_path_train = r'.\traindata\train\Annotations'
-    train_txt_path = r'./VOCdevkit/train.txt'
+    img_path_train = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/train/JPEGImages" 
+    ann_path_train = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/train/Annotations"
+    train_txt_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/VOCdevkit/train.txt"
     # 测试集
-    img_path_val = r'.\traindata\test\JPEGImages'
-    ann_path_val = r'.\traindata\test\Annotations'
-    val_txt_path = r'./VOCdevkit/val.txt'
+    img_path_val = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/test/JPEGImages" 
+    ann_path_val = r"D:/Bishe_Program/Licence_plate_recognition_model_training/traindata/test/Annotations"
+    val_txt_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/VOCdevkit/val.txt"
     # 类别文件
-    classes_path = 'model_data/self_classes.txt'
+    classes_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/model_data/self_classes.txt"
     # 制作train txt
     write_txt(img_path_train, ann_path_train, classes_path, train_txt_path)
 
