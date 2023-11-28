@@ -78,7 +78,20 @@ def translate(path, save_path):
         rx, ry = rb.split("&", 1)  # 分割右下角坐标，格式为"rx&ry"
         print(lx, ly, rx, ry)  # 打印坐标信息
 
-        results_xml = [['green', lx, ly, rx, ry]]  # 创建一个包含标签和坐标信息的列表，用于后续生成XML
+        # 获取文件名中最后一个 "-" 后的部分
+        category_part = filename.split("-")[-1]
+
+        # 根据这部分的值确定类别
+        if category_part.startswith("01"):
+            label = "blue"
+        elif category_part.startswith("02"):
+            label = "green"
+        else:
+            # 如果无法识别类别，可以跳过该文件或设为默认类别
+            print("无法确定类别，跳过文件: ", filename)
+            continue
+
+        results_xml = [[label, lx, ly, rx, ry]]  # 创建一个包含标签和坐标信息的列表，用于后续生成XML
 
         img = cv2.imread(os.path.join(path, filename))  # 使用OpenCV读取图片文件
         if img is None:  # 如果img为空，说明图片文件无效或不存在，则跳过当前循环
