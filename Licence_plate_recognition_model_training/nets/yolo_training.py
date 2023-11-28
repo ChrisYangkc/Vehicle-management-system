@@ -12,15 +12,20 @@ import torch.nn.functional as F
 
 class IOUloss(nn.Module):
     def __init__(self, reduction="none", loss_type="iou"):
+        # 初始化函数，设置损失函数的类型和减少方法
         super(IOUloss, self).__init__()
-        self.reduction = reduction
-        self.loss_type = loss_type
+        self.reduction = reduction  # 损失减少方法：'none'、'mean' 或 'sum'
+        self.loss_type = loss_type  # 损失类型：'iou' 或 'giou'
 
     def forward(self, pred, target):
-        assert pred.shape[0] == target.shape[0]
+        # 前向传播函数，计算损失值
+        assert pred.shape[0] == target.shape[0]  # 确保预测值和目标值的批量大小相同
 
+        # 将预测值和目标值的形状转换为（N, 4）
         pred = pred.view(-1, 4)
         target = target.view(-1, 4)
+
+        # 计算预测和目标的左上角和右下角坐标
         tl = torch.max(
             (pred[:, :2] - pred[:, 2:] / 2), (target[:, :2] - target[:, 2:] / 2)
         )
@@ -28,17 +33,23 @@ class IOUloss(nn.Module):
             (pred[:, :2] + pred[:, 2:] / 2), (target[:, :2] + target[:, 2:] / 2)
         )
 
+        # 计算预测和目标的面积
         area_p = torch.prod(pred[:, 2:], 1)
         area_g = torch.prod(target[:, 2:], 1)
 
+        # 计算交集和并集的面积
         en = (tl < br).type(tl.type()).prod(dim=1)
         area_i = torch.prod(br - tl, 1) * en
         area_u = area_p + area_g - area_i
+
+        # 计算IOU值
         iou = (area_i) / (area_u + 1e-16)
 
+        # 根据损失类型计算损失
         if self.loss_type == "iou":
             loss = 1 - iou ** 2
         elif self.loss_type == "giou":
+            # 计算GIOU损失
             c_tl = torch.min(
                 (pred[:, :2] - pred[:, 2:] / 2), (target[:, :2] - target[:, 2:] / 2)
             )
@@ -49,6 +60,7 @@ class IOUloss(nn.Module):
             giou = iou - (area_c - area_u) / area_c.clamp(1e-16)
             loss = 1 - giou.clamp(min=-1.0, max=1.0)
 
+        # 根据reduction方法减少损失
         if self.reduction == "mean":
             loss = loss.mean()
         elif self.reduction == "sum":

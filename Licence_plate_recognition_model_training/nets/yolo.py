@@ -219,16 +219,22 @@ class YOLOPAFPN(nn.Module):
 
 class YoloX(nn.Module):
     def __init__(self, num_classes, phi):
-        super().__init__()
+        # 初始化函数，设置类别数和模型版本
+        super().__init__()  # 调用基类的初始化函数
+        # 定义不同版本对应的深度和宽度参数
         depth_dict = {'nano': 0.33, 'tiny': 0.33, 's': 0.33, 'm': 0.67, 'l': 1.00, 'x': 1.33, }
         width_dict = {'nano': 0.25, 'tiny': 0.375, 's': 0.50, 'm': 0.75, 'l': 1.00, 'x': 1.25, }
+        # 根据模型版本选择深度和宽度
         depth, width = depth_dict[phi], width_dict[phi]
+        # 如果版本是nano，则使用深度卷积
         depthwise = True if phi == 'nano' else False
 
-        self.backbone = YOLOPAFPN(depth, width, depthwise=depthwise)
-        self.head = YOLOXHead(num_classes, width, depthwise=depthwise)
+        # 初始化网络的主干部分（backbone）和头部（head）
+        self.backbone = YOLOPAFPN(depth, width, depthwise=depthwise)  # 主干网络，用于特征提取
+        self.head = YOLOXHead(num_classes, width, depthwise=depthwise)  # 头部网络，用于目标检测
 
     def forward(self, x):
-        fpn_outs = self.backbone.forward(x)
-        outputs = self.head.forward(fpn_outs)
+        # 前向传播函数，定义网络的计算流程
+        fpn_outs = self.backbone.forward(x)  # 通过主干网络获取特征
+        outputs = self.head.forward(fpn_outs)  # 通过头部网络获取最终输出
         return outputs
