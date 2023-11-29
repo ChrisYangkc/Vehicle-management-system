@@ -14,9 +14,12 @@ from nets.yolo_training import (ModelEMA, YOLOLoss, get_lr_scheduler,
                                 set_optimizer_lr, weights_init)
 from utils.callbacks import LossHistory, EvalCallback
 
-from datasets.dataloader import YoloDataset, yolo_dataset_collate
+import sys
+sys.path.append("Licence_plate_recognition_model_training\datasets\dataloader.py")
+
 from utils.utils import get_classes, show_config
 from utils.utils_fit import fit_one_epoch
+from dataset.dataloader import YoloDataset, yolo_dataset_collate
 
 if __name__ == "__main__":
     Cuda = True
