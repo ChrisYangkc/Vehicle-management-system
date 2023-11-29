@@ -13,6 +13,7 @@ from nets.yolo import YoloX
 from nets.yolo_training import (ModelEMA, YOLOLoss, get_lr_scheduler,
                                 set_optimizer_lr, weights_init)
 from utils.callbacks import LossHistory, EvalCallback
+
 from datasets.dataloader import YoloDataset, yolo_dataset_collate
 from utils.utils import get_classes, show_config
 from utils.utils_fit import fit_one_epoch
@@ -26,12 +27,12 @@ if __name__ == "__main__":
     # 是否使用混合精度训练
     fp16 = True
     # 获得图片和标签
-    train_annotation_path = 'VOCdevkit/train.txt'
-    val_annotation_path = 'VOCdevkit/val.txt'
+    train_annotation_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/VOCdevkit/train.txt"
+    val_annotation_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/VOCdevkit/val.txt"
     # 类别txt文件
-    classes_path = 'model_data/self_classes.txt'
+    classes_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/model_data/self_classes.txt"
     # 预训练模型
-    model_path = '../../weights/best_epoch_weights.pth'
+    model_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/best_epoch_weights.pth"
     # 输入的shape大小，一定要是32的倍数
     input_shape = [640, 640]
     # nano、tiny、s、m、l、x
