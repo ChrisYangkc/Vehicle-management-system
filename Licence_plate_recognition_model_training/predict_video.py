@@ -8,8 +8,8 @@ from PIL import Image
 from yolo import YOLOX_infer
 
 if __name__ == "__main__":
-    yolox_weight = '../../weights/best_epoch_weights.pth'
-    classes_path = './model_data/self_classes.txt'
+    yolox_weight = r"D:/Bishe_Program/Licence_plate_recognition_model_training/weigth/best_epoch_weights.pth"
+    classes_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/model_data/self_classes.txt"
     input_shape = [640, 640]
     phi = 's'
     confidence = 0.5
