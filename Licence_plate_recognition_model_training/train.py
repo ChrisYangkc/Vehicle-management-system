@@ -35,7 +35,7 @@ if __name__ == "__main__":
     # 类别txt文件
     classes_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/model_data/self_classes.txt"
     # 预训练模型
-    model_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/best_epoch_weights.pth"
+    model_path = r"D:/Bishe_Program/Licence_plate_recognition_model_training/weigth/best_epoch_weights.pth"
     # 输入的shape大小，一定要是32的倍数
     input_shape = [640, 640]
     # nano、tiny、s、m、l、x
