@@ -1,0 +1,25 @@
+<annotation>
+  <folder>folder_name</folder>
+  <filename>0244921875-89_261-185&amp;412_482&amp;495-482&amp;492_196&amp;495_185&amp;421_478&amp;412-0_0_3_24_27_25_30_32-87-142-02.jpg.jpg</filename>
+  <source>
+    <database>Unknown</database>
+  </source>
+  <size>
+    <width>720</width>
+    <height>1160</height>
+    <channel>3</channel>
+  </size>
+  <segmented>0</segmented>
+  <object>
+    <name>green</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>185</xmin>
+      <ymin>412</ymin>
+      <xmax>482</xmax>
+      <ymax>495</ymax>
+    </bndbox>
+  </object>
+</annotation>
