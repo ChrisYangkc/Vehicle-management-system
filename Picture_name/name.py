@@ -3,7 +3,7 @@ import os
 # 指定.TXT文件的路径
 txt_file_path = r"D:/Bishe_Program/Picture_name/data.txt"
 # 指定包含图片的文件夹路径
-images_folder_path = r"D:/Bishe_Program/Picture_name/picture"
+images_folder_path = r"E:/毕设论文/毕设材料/训练数据集/CBLPRD-330k_v1/CBLPRD-330k"
 
 # 读取.TXT文件
 with open(txt_file_path, 'r', encoding='utf-8') as file:

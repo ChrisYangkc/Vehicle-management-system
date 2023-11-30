@@ -49,7 +49,7 @@ def adjust_learning_rate(optimizer, cur_epoch, base_lr, lr_schedule):
 
 def get_parser():
     parser = argparse.ArgumentParser(description='parameters to train net')
-    parser.add_argument('--max_epoch', default=500, help='epoch to train the network')
+    parser.add_argument('--max_epoch', default=100, help='epoch to train the network')
     parser.add_argument('--img_size', default=[94, 24], help='the image size')
     parser.add_argument('--train_img_dirs',
                         default=r"D:/Bishe_Program/Licence_plate_detection_model/traindata/blue",
@@ -59,7 +59,7 @@ def get_parser():
     parser.add_argument('--dropout_rate', default=0.5, help='dropout rate.')
     parser.add_argument('--learning_rate', default=0.001, help='base value of learning rate.')
     parser.add_argument('--lpr_max_len', default=8, help='license plate number max length.')
-    parser.add_argument('--train_batch_size', default=16, help='training batch size.')
+    parser.add_argument('--train_batch_size', default=128, help='training batch size.')
     parser.add_argument('--test_batch_size', default=8, help='testing batch size.')
     parser.add_argument('--phase_train', default=True, type=bool, help='train or test phase flag.')
     parser.add_argument('--num_workers', default=4, type=int, help='Number of workers used in dataloading')
