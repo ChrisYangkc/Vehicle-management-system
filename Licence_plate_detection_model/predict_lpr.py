@@ -53,7 +53,7 @@ def collate_fn(batch):
 def test():
     args = get_parser()
 
-    weights = r"D:/Bishe_Program/Licence_plate_detection_model/weigth/lpr_best.pth"
+    weights = r"D:/Bishe_Program/Licence_plate_detection_model/runs/best.pth"
     cuda = "cuda:0"
     lprnet = LPRNet(lpr_max_len=args.lpr_max_len, class_num=len(CHARS), dropout_rate=args.dropout_rate)
     device = torch.device(cuda)
