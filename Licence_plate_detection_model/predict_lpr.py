@@ -65,8 +65,12 @@ def test():
     lprnet.to(device)
 
     with torch.no_grad():
+        correct_char_predictions = 0
+        total_char_predictions = 0
+
         for root, dirs, files in os.walk(args.test_img_dirs):
             for file in files:
+                real_label = file.split('.')[0]
                 print('标签：', file.split('.')[0])
                 if 'jpg' not in file:
                     continue
@@ -102,8 +106,17 @@ def test():
                             continue
                         no_repeat_blank_label.append(CHARS[c])
                         pre_c = c
+                predicted_label = ''.join(no_repeat_blank_label)  # 预测标签
                 print('预测：', ''.join(no_repeat_blank_label))
 
+                # 比较每个字符
+                for real_char, pred_char in zip(real_label, predicted_label):
+                    if real_char == pred_char:
+                        correct_char_predictions += 1
+                    total_char_predictions += 1
+    
+    char_accuracy = correct_char_predictions / total_char_predictions
+    print('字符级准确率：', char_accuracy)
 
 
 if __name__ == "__main__":

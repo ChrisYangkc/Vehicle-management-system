@@ -59,7 +59,7 @@ def get_parser():
     parser.add_argument('--dropout_rate', default=0.5, help='dropout rate.')
     parser.add_argument('--learning_rate', default=0.001, help='base value of learning rate.')
     parser.add_argument('--lpr_max_len', default=8, help='license plate number max length.')
-    parser.add_argument('--train_batch_size', default=128, help='training batch size.')
+    parser.add_argument('--train_batch_size', default=32, help='training batch size.')
     parser.add_argument('--test_batch_size', default=8, help='testing batch size.')
     parser.add_argument('--phase_train', default=True, type=bool, help='train or test phase flag.')
     parser.add_argument('--num_workers', default=4, type=int, help='Number of workers used in dataloading')
