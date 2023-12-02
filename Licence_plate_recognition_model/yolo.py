@@ -8,10 +8,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from .dataset.data_predict import ImagePreprocessor
-from .nets.yolo import YoloX
-from .utils.utils import get_classes, show_config
-from .utils.utils_bbox import decode_outputs, non_max_suppression
+from Licence_plate_recognition_model.dataset.data_predict import ImagePreprocessor
+from Licence_plate_recognition_model.nets.yolo import YoloX
+from Licence_plate_recognition_model.utils.utils import get_classes, show_config
+from Licence_plate_recognition_model.utils.utils_bbox import decode_outputs, non_max_suppression
 
 
 class YOLOX_infer(object):
