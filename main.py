@@ -28,7 +28,7 @@ from PIL import Image
 import threading
 
 from Licence_plate_recognition_model.yolo import YOLOX_infer
-#from Licence_plate_recognition_model.ultralytics.inferer import YOLOV8_infer
+from Licence_plate_recognition_model.ultralytics.inferer import YOLOV8_infer
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):

@@ -1,0 +1,38 @@
+
+
+参数说明：
+    --yaml:     模型的yaml文件
+    --weight:   预训练权重
+    --cfg:      超参数
+    --data:     数据集格式
+    --epochs:   训练次数
+    --imgsz:    图片大小
+    --unamp:    关闭混合精度
+
+
+chepai:
+
+    SE
+    python ./train.py --yaml ultralytics/cfg/models/v8/det_self/yolov8s-attention-SE.yaml --cfg ultralytics/cfg/hyp_chepai.yaml --data ultralytics/cfg/datasets/VOC_self.yaml
+    Class     Images  Instances      Box(P       R      mAP50  mAP50-95): 100%|██████████| 161/161 [01:
+     all      20576      20576        1          1      0.995      0.856
+     blue     20576      19949        1          1      0.995      0.794
+     green    20576      627          1          1      0.995      0.917
+
+
+    V8
+    python ./train.py --yaml ultralytics/cfg/models/v8/yolov8s.yaml --cfg ultralytics/cfg/hyp_chepai.yaml --data ultralytics/cfg/datasets/VOC_self.yaml
+    Class     Images   Instances      Box(P       R      mAP50  mAP50-95): 100%|██████████| 161/161 [01:16<00:00,  2.10it/s]
+     all      20576      20576         1          1      0.995      0.853
+     blue     20576      19949         1          1      0.995      0.793
+     green    20576      627           1          1      0.995      0.914
+
+
+
+
+
+
+
+
+
+
