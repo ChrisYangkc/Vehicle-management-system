@@ -438,18 +438,18 @@ class Ui_MainWindow(object):
         self.label_11.setObjectName("label_11")
 
 
-        self.label_csdn_blog = DraggableLabel(MainWindow)
-        self.label_csdn_blog.setGeometry(QtCore.QRect(400, 3, 50, 37))
-        self.label_csdn_blog.setPixmap(QtGui.QPixmap("icon/CSDN.png"))
-        self.label_csdn_blog.setOpenExternalLinks(True)  # 允许打开外部链接
-        self.label_csdn_blog.setCursor(Qt.PointingHandCursor)  # 更改光标样式
-        self.label_csdn_blog.setStyleSheet("background-color: rgb(74, 160, 245);")
+        #self.label_csdn_blog = DraggableLabel(MainWindow)
+        #self.label_csdn_blog.setGeometry(QtCore.QRect(400, 3, 50, 37))
+        #self.label_csdn_blog.setPixmap(QtGui.QPixmap("icon/CSDN.png"))
+        #self.label_csdn_blog.setOpenExternalLinks(True)  # 允许打开外部链接
+        #self.label_csdn_blog.setCursor(Qt.PointingHandCursor)  # 更改光标样式
+        #self.label_csdn_blog.setStyleSheet("background-color: rgb(74, 160, 245);")
         # 设置网址超链接
-        url_blog = QUrl("https://blog.csdn.net/qq_28949847/article/details/130597656")
-        self.label_csdn_blog.setToolTip(url_blog.toString())
+        #url_blog = QUrl("https://blog.csdn.net/qq_28949847/article/details/130597656")
+        #self.label_csdn_blog.setToolTip(url_blog.toString())
         # 博客点击
-        self.label_csdn_blog.mousePressEvent = lambda event: self.open_url(
-            url_blog) if event.button() == Qt.LeftButton else None
+        #self.label_csdn_blog.mousePressEvent = lambda event: self.open_url(
+        #    url_blog) if event.button() == Qt.LeftButton else None
         #
         # self.label_csdn_all = DraggableLabel(MainWindow)
         # self.label_csdn_all.setGeometry(QtCore.QRect(450, 0, 50, 40))
@@ -464,7 +464,7 @@ class Ui_MainWindow(object):
         # self.label_csdn_all.mousePressEvent = lambda event: self.open_url(
         #     url_all) if event.button() == Qt.LeftButton else None
 
-
+        '''
         self.label_csdn_mbd = DraggableLabel(MainWindow)
         self.label_csdn_mbd.setGeometry(QtCore.QRect(450, 0, 50, 40))
         self.label_csdn_mbd.setPixmap(QtGui.QPixmap("icon/MBD.png"))
@@ -490,7 +490,7 @@ class Ui_MainWindow(object):
         # 博客点击
         self.label_csdn_csdn_project.mousePressEvent = lambda event: self.open_url(
             url_p) if event.button() == Qt.LeftButton else None
-
+        '''
         self.toolButton_exit = QtWidgets.QToolButton(self.centralwidget)
         self.toolButton_exit.setGeometry(QtCore.QRect(1550, 10, 23, 20))
         self.toolButton_exit.setStyleSheet("background: transparent")
