@@ -6,7 +6,8 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
-
+import sys
+sys.path.append(r"D:\Bishe_Program\Licence_plate_recognition_model\dataset")
 from dataset.data_predict import ImagePreprocessor
 from nets.yolo import YoloX
 from utils.utils import get_classes, show_config
