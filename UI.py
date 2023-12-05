@@ -23,341 +23,627 @@ import ctypes
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 
 
+# 导入 QLabel 类
+'''这个类中包含了两个主要的事件处理函数：mousePressEvent 和 mouseMoveEvent。
+mousePressEvent 在鼠标按下时被调用，用于记录鼠标的位置。
+mouseMoveEvent 在鼠标移动时被调用，如果鼠标左键被按下，则计算并更新父窗口的位置，从而实现拖动效果。'''
 class DraggableLabel(QLabel):
+    # 初始化函数
     def __init__(self, parent=None):
+        # 调用父类 QLabel 的初始化函数
         super().__init__(parent)
 
+    # 鼠标按下事件处理函数
     def mousePressEvent(self, event):
+        # 如果按下的是左键
         if event.button() == Qt.LeftButton:
+            # 记录鼠标按下时的位置
             self.offset = event.pos()
 
+    # 鼠标移动事件处理函数
     def mouseMoveEvent(self, event):
+        # 如果鼠标左键被按下且移动
         if event.buttons() & Qt.LeftButton:
-            # 计算移动后的窗口位置
+            # 计算新的窗口位置
+            # 新位置 = 父窗口当前位置 + 当前鼠标位置 - 鼠标按下时的位置
             window_pos = self.parent().pos() + event.pos() - self.offset
+            # 移动父窗口到新位置
             self.parent().move(window_pos)
 
 
+
+    # 定义 Ui_MainWindow 类
 class Ui_MainWindow(object):
 
+    # 定义 setupUi 方法，用于设置主窗口的界面
     def setupUi(self, MainWindow):
+        # 设置窗口的对象名称
         MainWindow.setObjectName("MainWindow")
+        # 设置窗口的模态类型（非模态）
         MainWindow.setWindowModality(QtCore.Qt.NonModal)
+        # 启用窗口
         MainWindow.setEnabled(True)
-        MainWindow.resize(1600, 900)
+        # 设置窗口大小
+        MainWindow.resize(1750, 1000)
+        # 设置窗口图标的路径
         ico_path = './icon/app.jpg'
+        # 创建一个图标对象
         icon = QtGui.QIcon()
+        # 向图标对象添加图片（正常和非激活状态下的图标）
         icon.addPixmap(QtGui.QPixmap(ico_path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置窗口图标
         MainWindow.setWindowIcon(icon)
 
+        # 创建一个字体对象
         font = QtGui.QFont()
+        # 设置字体为仿宋
         font.setFamily("仿宋")
+        # 设置窗口字体
         MainWindow.setFont(font)
+        # 设置窗口的上下文菜单策略（默认策略）
         MainWindow.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
+        # 设置窗口是否自动填充背景（不自动填充）
         MainWindow.setAutoFillBackground(False)
+        # 设置窗口的样式表（背景颜色）
         MainWindow.setStyleSheet("background-color: rgb(41, 50, 57);")
+        # 设置窗口的本地化设置（中文，中国）
         MainWindow.setLocale(QtCore.QLocale(QtCore.QLocale.Chinese, QtCore.QLocale.China))
-        # 设置无边框窗口
+        # 设置窗口为无边框
         MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        # 设置窗口背景透明
         MainWindow.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
+
+        # 创建主窗口的中央小部件
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+        # 创建一个字体对象
         font = QtGui.QFont()
+        # 设置字体为黑体
         font.setFamily("黑体")
+        # 设置中央小部件的字体
         self.centralwidget.setFont(font)
+        # 设置中央小部件的对象名称
         self.centralwidget.setObjectName("centralwidget")
+
+        # 创建一个框架小部件作为菜单
+        # 左侧背景框
         self.frame_menu = QtWidgets.QFrame(self.centralwidget)
-        self.frame_menu.setGeometry(QtCore.QRect(10, 60, 371, 821))
+        # 设置框架的几何位置和大小
+        self.frame_menu.setGeometry(QtCore.QRect(15, 60, 395, 911))
+        # 设置框架的鼠标跟踪为关闭状态
         self.frame_menu.setMouseTracking(False)
+        # 设置框架的样式表（背景颜色和边框圆角）
         self.frame_menu.setStyleSheet("background-color: rgb(54, 63, 70);\n"
-                                      "border-radius: 15px;")
+                                    "border-radius: 15px;")
+        # 设置框架的形状为样式化的面板
         self.frame_menu.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        # 设置框架的阴影为凸起
         self.frame_menu.setFrameShadow(QtWidgets.QFrame.Raised)
+        # 设置框架的对象名称
         self.frame_menu.setObjectName("frame_menu")
+
+        # 创建一个按钮小部件
         self.pushButton_start = QtWidgets.QPushButton(self.frame_menu)
-        self.pushButton_start.setGeometry(QtCore.QRect(130, 490, 131, 31))
+        # 设置按钮的几何位置和大小
+        # 开始运行
+        self.pushButton_start.setGeometry(QtCore.QRect(150, 490, 131, 31))
+        # 创建一个新的字体对象
         font = QtGui.QFont()
+        # 设置字体为黑体
         font.setFamily("黑体")
+        # 设置字体大小
         font.setPointSize(11)
+        # 设置字体加粗
         font.setBold(True)
+        # 设置字体权重
         font.setWeight(75)
+        # 设置按钮的字体
         self.pushButton_start.setFont(font)
+        # 下面的样式表代码被注释掉了
         # self.pushButton_start.setStyleSheet("background-color: rgb(98, 157, 235);"
         #                                     "border-radius: 15px;"
         #                                     "color: rgb(255, 255, 255);")
 
+
+        # 定义按钮样式
         button_style = (
+            # 当按钮处于正常状态时的样式
             "QPushButton {"
-            "background-color: rgb(98, 157, 235);"
-            "border-radius: 15px;"
-            "color: rgb(255, 255, 255);"
-            # "border: 4px solid rgb(60, 96, 144);"  # 设置边框
+            "background-color: rgb(98, 157, 235);"  # 按钮的背景颜色
+            "border-radius: 15px;"                 # 按钮边框的圆角
+            "color: rgb(255, 255, 255);"           # 按钮文字的颜色
+            # "border: 4px solid rgb(60, 96, 144);"  # 按钮的边框样式（这行代码已被注释掉）
 
             "}"
+            # 当鼠标悬停在按钮上时的样式
             "QPushButton:hover {"
-            "background-color: rgb(74, 117, 176);"
+            "background-color: rgb(74, 117, 176);"  # 按钮的背景颜色（鼠标悬停时）
             "}"
+            # 当按钮被按下时的样式
             "QPushButton:pressed {"
-            "background-color: rgb(60, 96, 144);"
+            "background-color: rgb(60, 96, 144);"   # 按钮的背景颜色（按下时）
             "}"
         )
 
+
         # 设置按钮样式
+        # 应用之前定义的按钮样式到 start 按钮
         self.pushButton_start.setStyleSheet(button_style)
 
+        # 设置 start 按钮的对象名称
         self.pushButton_start.setObjectName("pushButton_start")
+
+        # 创建另一个按钮，命名为 export
         self.pushButton_export = QtWidgets.QPushButton(self.frame_menu)
-        self.pushButton_export.setGeometry(QtCore.QRect(130, 540, 131, 31))
+        # 设置 export 按钮的几何位置和大小、
+        # 导出数据
+        self.pushButton_export.setGeometry(QtCore.QRect(150, 540, 131, 31))
+        # 创建一个字体对象
         font = QtGui.QFont()
+        # 设置字体为黑体
         font.setFamily("黑体")
+        # 设置字体大小
         font.setPointSize(11)
+        # 设置字体加粗
         font.setBold(True)
+        # 设置字体权重
         font.setWeight(75)
+        # 设置 export 按钮的字体
         self.pushButton_export.setFont(font)
-        # 设置按钮样式
+        # 应用之前定义的按钮样式到 export 按钮
         self.pushButton_export.setStyleSheet(button_style)
 
+        # 设置 export 按钮的对象名称
         self.pushButton_export.setObjectName("pushButton_export")
+
+        # 创建一个标签，用于显示图片
         self.label_10 = QtWidgets.QLabel(self.frame_menu)
-        self.label_10.setGeometry(QtCore.QRect(0, 10, 371, 201))
+        # 设置标签的几何位置和大小
+        self.label_10.setGeometry(QtCore.QRect(15, 10, 371, 201))
+        # 设置标签的文本为空
         self.label_10.setText("")
+        # 设置标签显示的图片
         self.label_10.setPixmap(QtGui.QPixmap("icon/icon.png"))
+        # 设置标签的对齐方式为居中
         self.label_10.setAlignment(QtCore.Qt.AlignCenter)
+        # 设置标签的对象名称
         self.label_10.setObjectName("label_10")
+
+        # 创建另一个标签，命名为 label_26
         self.label_26 = QtWidgets.QLabel(self.frame_menu)
-        self.label_26.setGeometry(QtCore.QRect(100, 730, 211, 61))
+        # 设置 label_26 标签的几何位置和大小
+        self.label_26.setGeometry(QtCore.QRect(110, 730, 211, 61))
+        # 创建一个字体对象
         font = QtGui.QFont()
+        # 设置字体为黑体
         font.setFamily("黑体")
+        # 设置字体大小
         font.setPointSize(14)
+        # 设置字体不加粗
         font.setBold(False)
+        # 设置字体权重
         font.setWeight(50)
+        # 设置 label_26 标签的字体
         self.label_26.setFont(font)
+        # 设置标签的工具提示持续时间为默认值
         self.label_26.setToolTipDuration(-1)
+        # 设置 label_26 标签的样式表（背景颜色、边框圆角、文字颜色）
         self.label_26.setStyleSheet("background-color: rgb(98, 105, 111);\n"
                                     "\n"
                                     "border-radius: 7px;\n"
                                     "\n"
                                     "color: rgb(151, 155, 158);")
+        # 设置 label_26 标签的文本为空
         self.label_26.setText("")
+        # 设置 label_26 标签的文本格式
         self.label_26.setTextFormat(QtCore.Qt.AutoText)
+        # 设置 label_26 标签的对象名称
         self.label_26.setObjectName("label_26")
+
+        # 创建一个名为 dir 的按钮
         self.pushButton_dir = QtWidgets.QPushButton(self.frame_menu)
+        # 设置按钮的位置和大小
         self.pushButton_dir.setGeometry(QtCore.QRect(18, 240, 45, 45))
+        # 设置按钮在鼠标悬停时的样式
         self.pushButton_dir.setStyleSheet("QPushButton:hover { background-color: rgb(98, 105, 111); }")
+        # 设置按钮文本为空
         self.pushButton_dir.setText("")
+        # 创建一个图标对象
         icon = QtGui.QIcon()
+        # 添加图标图片
         icon.addPixmap(QtGui.QPixmap("icon/dir.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置按钮的图标
         self.pushButton_dir.setIcon(icon)
+        # 设置图标的大小
         self.pushButton_dir.setIconSize(QtCore.QSize(40, 27))
+        # 设置按钮的对象名称
         self.pushButton_dir.setObjectName("pushButton_dir")
+
+        # 创建一个名为 video 的按钮
         self.pushButton_video = QtWidgets.QPushButton(self.frame_menu)
-        self.pushButton_video.setGeometry(QtCore.QRect(18, 293, 45, 45))
+        # 设置按钮的位置和大小
+        self.pushButton_video.setGeometry(QtCore.QRect(18, 298, 45, 45))
+        # 设置按钮在鼠标悬停时的样式
         self.pushButton_video.setStyleSheet("QPushButton:hover { background-color: rgb(98, 105, 111); }")
+        # 设置按钮文本为空
         self.pushButton_video.setText("")
+        # 创建一个新的图标对象
         icon1 = QtGui.QIcon()
+        # 添加图标图片
         icon1.addPixmap(QtGui.QPixmap("icon/video.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置按钮的图标
         self.pushButton_video.setIcon(icon1)
+        # 设置图标的大小
         self.pushButton_video.setIconSize(QtCore.QSize(40, 27))
+        # 设置按钮的对象名称
         self.pushButton_video.setObjectName("pushButton_video")
+
+        # 创建一个名为 img 的按钮
         self.pushButton_img = QtWidgets.QPushButton(self.frame_menu)
+        # 设置按钮的位置和大小
         self.pushButton_img.setGeometry(QtCore.QRect(18, 355, 45, 45))
+        # 设置按钮在鼠标悬停时的样式
         self.pushButton_img.setStyleSheet("QPushButton:hover { background-color: rgb(98, 105, 111); }")
+        # 设置按钮文本为空
         self.pushButton_img.setText("")
+        # 创建另一个新的图标对象
         icon2 = QtGui.QIcon()
+        # 添加图标图片
         icon2.addPixmap(QtGui.QPixmap("icon/dirs.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置按钮的图标
         self.pushButton_img.setIcon(icon2)
+        # 设置图标的大小
         self.pushButton_img.setIconSize(QtCore.QSize(40, 27))
+        # 设置按钮的对象名称
         self.pushButton_img.setObjectName("pushButton_img")
+
+        # 创建一个名为 cam 的按钮
         self.pushButton_cam = QtWidgets.QPushButton(self.frame_menu)
+        # 设置按钮的位置和大小
         self.pushButton_cam.setGeometry(QtCore.QRect(18, 411, 45, 45))
+        # 创建一个尺寸策略对象
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        # 设置水平和垂直拉伸为0
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
+        # 设置尺寸策略
         sizePolicy.setHeightForWidth(self.pushButton_cam.sizePolicy().hasHeightForWidth())
+        # 应用尺寸策略到按钮
         self.pushButton_cam.setSizePolicy(sizePolicy)
+        # 设置按钮的光标为箭头
         self.pushButton_cam.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        # 设置按钮在鼠标悬停时的样式
         self.pushButton_cam.setStyleSheet("QPushButton:hover { background-color: rgb(98, 105, 111); }")
+        # 设置按钮文本为空
         self.pushButton_cam.setText("")
+        # 创建另一个新的图标对象
         icon3 = QtGui.QIcon()
+        # 添加图标图片
         icon3.addPixmap(QtGui.QPixmap("icon/cam.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置按钮的图标
         self.pushButton_cam.setIcon(icon3)
+        # 设置图标的大小
         self.pushButton_cam.setIconSize(QtCore.QSize(40, 27))
+        # 设置按钮不可切换（非复选按钮）
         self.pushButton_cam.setCheckable(False)
+        # 设置按钮不自动重复点击
         self.pushButton_cam.setAutoRepeat(False)
+        # 设置自动重复点击的延迟
         self.pushButton_cam.setAutoRepeatDelay(300)
+        # 设置按钮的对象名称
         self.pushButton_cam.setObjectName("pushButton_cam")
+
+        # 创建一个标签
         self.label = QtWidgets.QLabel(self.frame_menu)
-        self.label.setGeometry(QtCore.QRect(70, 250, 280, 30))
+        # 设置标签的位置和大小
+        self.label.setGeometry(QtCore.QRect(70, 250, 300, 30))
+        # 创建另一个尺寸策略对象
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        # 设置水平和垂直拉伸为0
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
+        # 设置尺寸策略
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        # 应用尺寸策略到标签
         self.label.setSizePolicy(sizePolicy)
+
+        # 创建一个字体对象
         font = QtGui.QFont()
+        # 设置字体为黑体
         font.setFamily("黑体")
+        # 设置字体大小为11
         font.setPointSize(11)
+        # 设置字体不加粗
         font.setBold(False)
+        # 设置字体权重为50
         font.setWeight(50)
+        # 设置 label 的字体
         self.label.setFont(font)
+        # 设置 label 的工具提示持续时间为默认值
         self.label.setToolTipDuration(-1)
+        # 设置 label 的样式（背景颜色、内边距、边框圆角、文字颜色）
         self.label.setStyleSheet("background-color: rgb(98, 105, 111);\n"
-                                 "padding-left: 5px;"
-                                 "border-radius: 7px;\n"
-                                 "\n"
-                                 "color: rgb(151, 155, 158);")
+                                "padding-left: 5px;"
+                                "border-radius: 7px;\n"
+                                "\n"
+                                "color: rgb(151, 155, 158);")
+        # 设置 label 的文本格式
         self.label.setTextFormat(QtCore.Qt.AutoText)
+        # 设置 label 的对象名称
         self.label.setObjectName("label")
+
+        # 创建另一个标签 label_3
         self.label_3 = QtWidgets.QLabel(self.frame_menu)
-        self.label_3.setGeometry(QtCore.QRect(70, 361, 280, 30))
+        # 设置 label_3 的几何位置和大小
+        self.label_3.setGeometry(QtCore.QRect(70, 361, 300, 30))
+        # 重复之前的字体设置
         font = QtGui.QFont()
         font.setFamily("黑体")
         font.setPointSize(11)
         font.setBold(False)
         font.setWeight(50)
+        # 设置 label_3 的字体
         self.label_3.setFont(font)
+        # 设置 label_3 的工具提示持续时间为默认值
         self.label_3.setToolTipDuration(-1)
+        # 设置 label_3 的样式（与之前 label 相同）
         self.label_3.setStyleSheet("background-color: rgb(98, 105, 111);\n"
-                                   "padding-left: 5px;"
-                                   "border-radius: 7px;\n"
-                                   "\n"
-                                   "color: rgb(151, 155, 158);")
+                                "padding-left: 5px;"
+                                "border-radius: 7px;\n"
+                                "\n"
+                                "color: rgb(151, 155, 158);")
+        # 设置 label_3 的文本格式
         self.label_3.setTextFormat(QtCore.Qt.AutoText)
+        # 设置 label_3 的对象名称
         self.label_3.setObjectName("label_3")
+
+        # 创建另一个标签 label_2
         self.label_2 = QtWidgets.QLabel(self.frame_menu)
-        self.label_2.setGeometry(QtCore.QRect(70, 302, 280, 30))
+        # 设置 label_2 的几何位置和大小
+        self.label_2.setGeometry(QtCore.QRect(70, 307, 300, 30))
+        # 重复之前的字体设置
         font = QtGui.QFont()
         font.setFamily("黑体")
         font.setPointSize(11)
         font.setBold(False)
         font.setWeight(50)
+        # 设置 label_2 的字体
         self.label_2.setFont(font)
+        # 设置 label_2 的工具提示持续时间为默认值
         self.label_2.setToolTipDuration(-1)
+        # 设置 label_2 的样式（与之前 label 相同）
         self.label_2.setStyleSheet("background-color: rgb(98, 105, 111);\n"
-                                   "padding-left: 5px;"
-                                   "border-radius: 7px;\n"
-                                   "\n"
-                                   "color: rgb(151, 155, 158);")
+                                "padding-left: 5px;"
+                                "border-radius: 7px;\n"
+                                "\n"
+                                "color: rgb(151, 155, 158);")
+        # 设置 label_2 的文本格式
         self.label_2.setTextFormat(QtCore.Qt.AutoText)
+        # 设置 label_2 的对象名称
         self.label_2.setObjectName("label_2")
+
+        # 创建另一个标签 label_4
         self.label_4 = QtWidgets.QLabel(self.frame_menu)
-        self.label_4.setGeometry(QtCore.QRect(70, 419, 280, 30))
+        # 设置 label_4 的几何位置和大小
+        self.label_4.setGeometry(QtCore.QRect(70, 419, 300, 30))
+        # 创建并设置尺寸策略对象
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
+        # 应用尺寸策略到 label_4
         self.label_4.setSizePolicy(sizePolicy)
+
+        # 重复之前的字体设置
         font = QtGui.QFont()
         font.setFamily("黑体")
         font.setPointSize(11)
         font.setBold(False)
         font.setWeight(50)
+        # 设置 label_4 的字体
         self.label_4.setFont(font)
+        # 设置 label_4 的工具提示持续时间为默认值
         self.label_4.setToolTipDuration(-1)
+        # 设置 label_4 的样式（背景颜色、内边距、边框圆角、文字颜色）
         self.label_4.setStyleSheet("background-color: rgb(98, 105, 111);\n"
-                                   "padding-left: 5px;"
-                                   "border-radius: 7px;\n"
-                                   "\n"
-                                   "color: rgb(151, 155, 158);")
+                                "padding-left: 5px;"
+                                "border-radius: 7px;\n"
+                                "\n"
+                                "color: rgb(151, 155, 158);")
+        # 设置 label_4 的文本格式
         self.label_4.setTextFormat(QtCore.Qt.AutoText)
+        # 设置 label_4 的对象名称
         self.label_4.setObjectName("label_4")
+
+        # 创建一个名为 label_result 的标签
         self.label_result = QtWidgets.QLabel(self.frame_menu)
-        self.label_result.setGeometry(QtCore.QRect(140, 611, 131, 31))
+        # 设置 label_result 的几何位置和大小
+        self.label_result.setGeometry(QtCore.QRect(150, 611, 131, 31))
+        # 创建一个新的字体对象
         font = QtGui.QFont()
+        # 设置字体加粗
         font.setBold(True)
+        # 设置字体权重
         font.setWeight(75)
+        # 设置 label_result 的字体
         self.label_result.setFont(font)
+        # 设置 label_result 的样式（背景颜色、边框圆角、文字颜色）
         self.label_result.setStyleSheet("background-color: rgb(98, 105, 111);\n"
                                         "\n"
                                         "border-radius: 7px;\n"
                                         "\n"
                                         "color: rgb(255, 255, 255);")
+        # 设置 label_result 的对齐方式为居中
         self.label_result.setAlignment(QtCore.Qt.AlignCenter)
+        # 设置 label_result 的文本为空
         self.label_result.setText("")
+        # 设置 label_result 的对象名称
         self.label_result.setObjectName("label_result")
+
+        # 创建一个名为 label_score 的标签
         self.label_score = QtWidgets.QLabel(self.frame_menu)
-        self.label_score.setGeometry(QtCore.QRect(140, 651, 131, 31))
+        # 设置 label_score 的几何位置和大小
+        self.label_score.setGeometry(QtCore.QRect(150, 655, 131, 31))
+        # 重复之前的字体设置
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
+        # 设置 label_score 的字体
         self.label_score.setFont(font)
+        # 设置 label_score 的样式（背景颜色、边框圆角、文字颜色）
         self.label_score.setStyleSheet("background-color: rgb(98, 105, 111);\n"
-                                       "\n"
-                                       "border-radius: 7px;\n"
-                                       "\n"
-                                       "color: rgb(255, 255, 255);")
+                                    "\n"
+                                    "border-radius: 7px;\n"
+                                    "\n"
+                                    "color: rgb(255, 255, 255);")
+        # 设置 label_score 的对齐方式为居中
         self.label_score.setAlignment(QtCore.Qt.AlignCenter)
+        # 设置 label_score 的文本为空
         self.label_score.setText("")
+        # 设置 label_score 的对象名称
         self.label_score.setObjectName("label_score")
+
+        # 创建一个名为 label_23 的标签
         self.label_23 = QtWidgets.QLabel(self.frame_menu)
-        self.label_23.setGeometry(QtCore.QRect(55, 660, 71, 16))
+        # 设置 label_23 的几何位置和大小
+        self.label_23.setGeometry(QtCore.QRect(55, 660, 91, 16))
+        # 创建一个字体对象
         font = QtGui.QFont()
+        # 设置字体加粗
         font.setBold(True)
+        # 设置字体权重
         font.setWeight(75)
+        # 设置 label_23 的字体
         self.label_23.setFont(font)
+        # 设置 label_23 的样式（文字颜色）
         self.label_23.setStyleSheet("color: rgb(255, 255, 255);")
+        # 设置 label_23 的对象名称
         self.label_23.setObjectName("label_23")
+
+        # 创建一个名为 label_21 的标签
         self.label_21 = QtWidgets.QLabel(self.frame_menu)
-        self.label_21.setGeometry(QtCore.QRect(55, 619, 71, 16))
+        # 设置 label_21 的几何位置和大小
+        self.label_21.setGeometry(QtCore.QRect(55, 619, 91, 16))
+        # 重复之前的字体设置
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
+        # 设置 label_21 的字体
         self.label_21.setFont(font)
+        # 设置 label_21 的样式（文字颜色）
         self.label_21.setStyleSheet("color: rgb(255, 255, 255);")
+        # 设置 label_21 的对象名称
         self.label_21.setObjectName("label_21")
+
+        # 创建一个名为 label_25 的标签
         self.label_25 = QtWidgets.QLabel(self.frame_menu)
-        self.label_25.setGeometry(QtCore.QRect(55, 700, 71, 16))
+        # 设置 label_25 的几何位置和大小
+        self.label_25.setGeometry(QtCore.QRect(55, 700, 91, 16))
+        # 重复之前的字体设置
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
+        # 设置 label_25 的字体
         self.label_25.setFont(font)
+        # 设置 label_25 的样式（文字颜色）
         self.label_25.setStyleSheet("color: rgb(255, 255, 255);")
+        # 设置 label_25 的对象名称
         self.label_25.setObjectName("label_25")
+
+        # 创建一个名为 label_20 的标签，用于显示图片
         self.label_20 = QtWidgets.QLabel(self.frame_menu)
+        # 设置 label_20 的几何位置和大小
         self.label_20.setGeometry(QtCore.QRect(22, 613, 22, 26))
+        # 设置 label_20 的文本为空
         self.label_20.setText("")
+        # 设置 label_20 显示的图片
         self.label_20.setPixmap(QtGui.QPixmap("icon/res.png"))
+        # 设置 label_20 的对象名称
         self.label_20.setObjectName("label_20")
+
+        # 创建一个名为 label_22 的标签，用于显示图片
         self.label_22 = QtWidgets.QLabel(self.frame_menu)
+        # 设置 label_22 的几何位置和大小
         self.label_22.setGeometry(QtCore.QRect(20, 657, 25, 25))
+        # 设置 label_22 的文本为空
         self.label_22.setText("")
+        # 设置 label_22 显示的图片
         self.label_22.setPixmap(QtGui.QPixmap("icon/score.png"))
+        # 设置 label_22 的对象名称
         self.label_22.setObjectName("label_22")
+
+        # 创建一个名为 label_24 的标签，用于显示图片
         self.label_24 = QtWidgets.QLabel(self.frame_menu)
+        # 设置 label_24 的几何位置和大小
         self.label_24.setGeometry(QtCore.QRect(22, 701, 25, 16))
+        # 设置 label_24 的文本为空
         self.label_24.setText("")
+        # 设置 label_24 显示的图片
         self.label_24.setPixmap(QtGui.QPixmap("icon/loc.png"))
+        # 设置 label_24 的对象名称
         self.label_24.setObjectName("label_24")
+
+        # 创建一个名为 tableWidget_info 的表格控件
         self.tableWidget_info = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget_info.setGeometry(QtCore.QRect(400, 610, 1181, 271))
+        # 设置 tableWidget_info 的几何位置和大小
+        # 表格背景框
+        self.tableWidget_info.setGeometry(QtCore.QRect(425, 670, 1300, 300))
+
+        # 创建并设置字体对象（字体为Arial，大小为12）
         font = QtGui.QFont("Arial", 12)
+        # 应用字体到表格控件
         self.tableWidget_info.setFont(font)
+        # 设置表格控件的背景颜色
         self.tableWidget_info.setStyleSheet("background-color: rgb(54, 63, 70);")
-        # 设置网格线颜色
+        # 设置表头的背景颜色（此处的样式表会覆盖上面的背景颜色设置）
         self.tableWidget_info.setStyleSheet("QHeaderView::section { background-color: red; }")
+        # 设置表格控件的线宽为0
         self.tableWidget_info.setLineWidth(0)
-        # 启用横向纵向滑动条
+        # 设置垂直滚动条始终显示
         self.tableWidget_info.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        # 设置水平滚动条始终不显示
         self.tableWidget_info.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
-        # 创建自定义滚动条并设置样式
+        # 创建一个垂直方向的滚动条
         vertical_scrollbar = QScrollBar(Qt.Vertical, self.tableWidget_info)
+        # 设置滚动条的样式（背景颜色）
         vertical_scrollbar.setStyleSheet("background-color: rgb(179, 211, 250);")
 
+
         # 将自定义滚动条设置给滚动区域
+        # 为表格控件设置之前创建的垂直滚动条
         self.tableWidget_info.setVerticalScrollBar(vertical_scrollbar)
 
+        # 设置表格列数为8
         self.tableWidget_info.setColumnCount(8)
+        # 设置表格控件的对象名称
         self.tableWidget_info.setObjectName("tableWidget_info")
+        # 初始时设置表格的行数为0
         self.tableWidget_info.setRowCount(0)
+
+        # 以下部分创建并设置表格的列标题
+        # 创建第一列的表头项
         item = QtWidgets.QTableWidgetItem()
+        # 设置第一列的表头
         self.tableWidget_info.setHorizontalHeaderItem(0, item)
+        # 设置第一列的宽度
         self.tableWidget_info.setColumnWidth(0, 80)
+
+        # 创建第二列的表头项
         item = QtWidgets.QTableWidgetItem()
+        # 设置第二列的表头
         self.tableWidget_info.setHorizontalHeaderItem(1, item)
+        # 设置第二列的宽度
         self.tableWidget_info.setColumnWidth(1, 293)
+
+        # 创建第三列的表头项
         item = QtWidgets.QTableWidgetItem()
+        # 设置第三列的表头
         self.tableWidget_info.setHorizontalHeaderItem(2, item)
+        # 设置第三列的宽度
         self.tableWidget_info.setColumnWidth(2, 180)
+
+        # 创建并设置第四至第八列的表头项（省略了具体的列宽度设置）
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_info.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
@@ -371,100 +657,153 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_info.setHorizontalHeaderItem(7, item)
         self.tableWidget_info.setColumnWidth(7, 150)
+
+        # 设置表头不自动调整大小
         self.tableWidget_info.horizontalHeader().setCascadingSectionResizes(False)
-        # 选中时，表头无效果
+        # 设置表头选中时无高亮效果
         self.tableWidget_info.horizontalHeader().setHighlightSections(False)
+        # 注释掉的代码设置默认列宽
         # self.tableWidget_info.horizontalHeader().setDefaultSectionSize(148)
+        # 设置表头最小列宽
         self.tableWidget_info.horizontalHeader().setMinimumSectionSize(30)
         # 设置表头的背景颜色
         self.tableWidget_info.horizontalHeader().setStyleSheet(
             "QHeaderView::section { background-color: rgb(179, 211, 250); }")
-        # 禁用行号
+        # 隐藏垂直表头（行号）
         self.tableWidget_info.verticalHeader().setVisible(False)
-        # 内容不可更改
+        # 设置表格内容不可被编辑
         self.tableWidget_info.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
+        # 创建一个名为 label_15 的标签
         self.label_15 = QtWidgets.QLabel(self.centralwidget)
-        self.label_15.setGeometry(QtCore.QRect(0, 0, 1601, 40))
+        # 设置 label_15 的几何位置和大小
+        self.label_15.setGeometry(QtCore.QRect(0, 0, 1750, 40))
+        # 设置 label_15 的样式（背景颜色）
         self.label_15.setStyleSheet("background-color: rgb(74, 160, 245);")
+        # 设置 label_15 的文本为空
         self.label_15.setText("")
+        # 设置 label_15 的对象名称
         self.label_15.setObjectName("label_15")
+
+        # 创建一个名为 label_img 的标签，用于显示图片
         self.label_img = QtWidgets.QLabel(self.centralwidget)
-        self.label_img.setGeometry(QtCore.QRect(400, 100, 1181, 501))
+        # 设置 label_img 的几何位置和大小
+        # 图片显示背景框
+        self.label_img.setGeometry(QtCore.QRect(425, 100, 1300, 561))
+        # 设置 label_img 的样式（背景颜色和边框圆角）
         self.label_img.setStyleSheet("background-color: rgb(54, 63, 70);\n"
-                                     "border-radius: 15px;")
+                                    "border-radius: 15px;")
+        # 设置 label_img 的文本为空
         self.label_img.setText("")
+        # 设置 label_img 显示的图片
         self.label_img.setPixmap(QtGui.QPixmap("icon/zhutu2.png"))
+        # 设置 label_img 的对齐方式为居中
         self.label_img.setAlignment(QtCore.Qt.AlignCenter)
+        # 设置 label_img 的对象名称
         self.label_img.setObjectName("label_img")
+
+        # 创建一个名为 layoutWidget 的布局控件
         self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(400, 60, 115, 27))
+        # 设置 layoutWidget 的几何位置和大小
+        self.layoutWidget.setGeometry(QtCore.QRect(425, 60, 115, 27))
+        # 设置 layoutWidget 的对象名称
         self.layoutWidget.setObjectName("layoutWidget")
+
+        # 创建一个水平布局
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
+        # 设置布局的尺寸约束为固定大小
         self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetFixedSize)
+        # 设置布局的内容边距为0
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        # 设置水平布局的对象名称
         self.horizontalLayout.setObjectName("horizontalLayout")
+
+        # 创建一个名为 label_19 的标签，用于显示图片
         self.label_19 = QtWidgets.QLabel(self.layoutWidget)
+        # 设置 label_19 的文本为空
         self.label_19.setText("")
+        # 设置 label_19 显示的图片
         self.label_19.setPixmap(QtGui.QPixmap("icon/img.png"))
+        # 设置 label_19 的对象名称
         self.label_19.setObjectName("label_19")
+
+        # 将 label_19 添加到水平布局中
         self.horizontalLayout.addWidget(self.label_19)
+
+        # 创建一个名为 label_5 的标签
         self.label_5 = QtWidgets.QLabel(self.layoutWidget)
+        # 创建并设置字体对象
         font = QtGui.QFont()
         font.setFamily("黑体")
         font.setPointSize(13)
+        # 应用字体到 label_5
         self.label_5.setFont(font)
+        # 设置 label_5 的样式（文字颜色）
         self.label_5.setStyleSheet("color: rgb(255, 255, 255);")
+        # 设置 label_5 的对象名称
         self.label_5.setObjectName("label_5")
+        # 将 label_5 添加到水平布局中
         self.horizontalLayout.addWidget(self.label_5)
 
+        # 创建一个可拖动的标签 label_logo
         self.label_logo = DraggableLabel(MainWindow)
+        # 设置 label_logo 显示的图片
         self.label_logo.setPixmap(QtGui.QPixmap("icon/app.png"))
+        # 设置 label_logo 的样式（背景颜色）
         self.label_logo.setStyleSheet("background-color: rgb(74, 160, 245);")
+        # 设置 label_logo 的几何位置和大小
         self.label_logo.setGeometry(QtCore.QRect(10, 5, 50, 35))
+        # 设置 label_logo 的对象名称
         self.label_logo.setObjectName("label_logo")
 
+        # 创建另一个可拖动的标签 label_11
         self.label_11 = DraggableLabel(MainWindow)
+        # 设置 label_11 的几何位置和大小
         self.label_11.setGeometry(QtCore.QRect(55, 0, 250, 41))
+        # 创建并设置字体对象
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
         font.setKerning(True)
+        # 应用字体到 label_11
         self.label_11.setFont(font)
+        # 设置 label_11 的样式（背景透明、文字颜色）
         self.label_11.setStyleSheet("background: transparent;\n"
                                     "color: rgb(255, 255, 255);")
+        # 设置 label_11 的对象名称
         self.label_11.setObjectName("label_11")
 
 
-        #self.label_csdn_blog = DraggableLabel(MainWindow)
-        #self.label_csdn_blog.setGeometry(QtCore.QRect(400, 3, 50, 37))
-        #self.label_csdn_blog.setPixmap(QtGui.QPixmap("icon/CSDN.png"))
-        #self.label_csdn_blog.setOpenExternalLinks(True)  # 允许打开外部链接
-        #self.label_csdn_blog.setCursor(Qt.PointingHandCursor)  # 更改光标样式
-        #self.label_csdn_blog.setStyleSheet("background-color: rgb(74, 160, 245);")
-        # 设置网址超链接
-        #url_blog = QUrl("https://blog.csdn.net/qq_28949847/article/details/130597656")
-        #self.label_csdn_blog.setToolTip(url_blog.toString())
-        # 博客点击
-        #self.label_csdn_blog.mousePressEvent = lambda event: self.open_url(
-        #    url_blog) if event.button() == Qt.LeftButton else None
-        #
-        # self.label_csdn_all = DraggableLabel(MainWindow)
-        # self.label_csdn_all.setGeometry(QtCore.QRect(450, 0, 50, 40))
-        # self.label_csdn_all.setPixmap(QtGui.QPixmap("icon/cam.png"))
-        # self.label_csdn_all.setOpenExternalLinks(True)  # 允许打开外部链接
-        # self.label_csdn_all.setCursor(Qt.PointingHandCursor)  # 更改光标样式
-        # self.label_csdn_all.setStyleSheet("background-color: rgb(74, 160, 245);")
-        # # # 设置网址超链接
-        # url_all = QUrl("https://blog.csdn.net/qq_28949847/article/details/128552785")
-        # self.label_csdn_all.setToolTip(url_all.toString())
-        # # 博客点击
-        # self.label_csdn_all.mousePressEvent = lambda event: self.open_url(
-        #     url_all) if event.button() == Qt.LeftButton else None
-
         '''
+        self.label_csdn_blog = DraggableLabel(MainWindow)
+        self.label_csdn_blog.setGeometry(QtCore.QRect(400, 3, 50, 37))
+        self.label_csdn_blog.setPixmap(QtGui.QPixmap("icon/CSDN.png"))
+        self.label_csdn_blog.setOpenExternalLinks(True)  # 允许打开外部链接
+        self.label_csdn_blog.setCursor(Qt.PointingHandCursor)  # 更改光标样式
+        self.label_csdn_blog.setStyleSheet("background-color: rgb(74, 160, 245);")
+        # 设置网址超链接
+        url_blog = QUrl("https://blog.csdn.net/qq_28949847/article/details/130597656")
+        self.label_csdn_blog.setToolTip(url_blog.toString())
+        # 博客点击
+        self.label_csdn_blog.mousePressEvent = lambda event: self.open_url(
+           url_blog) if event.button() == Qt.LeftButton else None
+        #
+        self.label_csdn_all = DraggableLabel(MainWindow)
+        self.label_csdn_all.setGeometry(QtCore.QRect(450, 0, 50, 40))
+        self.label_csdn_all.setPixmap(QtGui.QPixmap("icon/cam.png"))
+        self.label_csdn_all.setOpenExternalLinks(True)  # 允许打开外部链接
+        self.label_csdn_all.setCursor(Qt.PointingHandCursor)  # 更改光标样式
+        self.label_csdn_all.setStyleSheet("background-color: rgb(74, 160, 245);")
+        # # # 设置网址超链接
+        url_all = QUrl("https://blog.csdn.net/qq_28949847/article/details/128552785")
+        self.label_csdn_all.setToolTip(url_all.toString())
+        # 博客点击
+        self.label_csdn_all.mousePressEvent = lambda event: self.open_url(
+            url_all) if event.button() == Qt.LeftButton else None
+
+        
         self.label_csdn_mbd = DraggableLabel(MainWindow)
         self.label_csdn_mbd.setGeometry(QtCore.QRect(450, 0, 50, 40))
         self.label_csdn_mbd.setPixmap(QtGui.QPixmap("icon/MBD.png"))
@@ -491,38 +830,69 @@ class Ui_MainWindow(object):
         self.label_csdn_csdn_project.mousePressEvent = lambda event: self.open_url(
             url_p) if event.button() == Qt.LeftButton else None
         '''
+        # 创建一个名为 toolButton_exit 的工具按钮
         self.toolButton_exit = QtWidgets.QToolButton(self.centralwidget)
-        self.toolButton_exit.setGeometry(QtCore.QRect(1550, 10, 23, 20))
+        # 设置工具按钮的几何位置和大小
+        self.toolButton_exit.setGeometry(QtCore.QRect(1700, 10, 23, 20))
+        # 设置工具按钮的样式（背景透明）
         self.toolButton_exit.setStyleSheet("background: transparent")
+        # 创建一个图标对象
         icon4 = QtGui.QIcon()
+        # 添加图标图片
         icon4.addPixmap(QtGui.QPixmap("icon/cha.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置工具按钮的图标
         self.toolButton_exit.setIcon(icon4)
+        # 设置工具按钮的对象名称
         self.toolButton_exit.setObjectName("toolButton")
+
+        # 创建另一个名为 toolButton_2 的工具按钮
         self.toolButton_2 = QtWidgets.QToolButton(self.centralwidget)
-        self.toolButton_2.setGeometry(QtCore.QRect(1500, 10, 23, 20))
+        # 设置工具按钮的几何位置和大小
+        self.toolButton_2.setGeometry(QtCore.QRect(1650, 10, 23, 20))
+        # 设置工具按钮的样式（背景透明）
         self.toolButton_2.setStyleSheet("background: transparent")
+        # 创建一个新的图标对象
         icon5 = QtGui.QIcon()
+        # 添加图标图片
         icon5.addPixmap(QtGui.QPixmap("icon/fangda.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置工具按钮的图标
         self.toolButton_2.setIcon(icon5)
+        # 设置工具按钮的对象名称
         self.toolButton_2.setObjectName("toolButton_2")
+
+        # 创建第三个名为 toolButton_3 的工具按钮
         self.toolButton_3 = QtWidgets.QToolButton(self.centralwidget)
-        self.toolButton_3.setGeometry(QtCore.QRect(1450, 4, 23, 20))
+        # 设置工具按钮的几何位置和大小
+        self.toolButton_3.setGeometry(QtCore.QRect(1600, 4, 23, 20))
+        # 设置工具按钮的样式（背景透明）
         self.toolButton_3.setStyleSheet("background: transparent")
+        # 创建另一个新的图标对象
         icon6 = QtGui.QIcon()
+        # 添加图标图片
         icon6.addPixmap(QtGui.QPixmap("icon/heng.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # 设置工具按钮的图标
         self.toolButton_3.setIcon(icon6)
+        # 设置工具按钮的对象名称
         self.toolButton_3.setObjectName("toolButton_3")
+
+        # 将 centralwidget 设置为主窗口的中央小部件
         MainWindow.setCentralWidget(self.centralwidget)
 
+        # 调用 retranslateUi 函数来设置界面文本（省略了函数定义）
         self.retranslateUi(MainWindow)
+        # 连接所有的信号和槽
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        # 设置当前工程文件的路径
         self.ProjectPath = os.getcwd()  # 获取当前工程文件位置
+
 
     # 打开超链接
     def open_url(self, url):
         QDesktopServices.openUrl(url)
 
     def retranslateUi(self, MainWindow):
+        '''设置窗口标题、按钮标签、标签文本、表头标题等文本内容。它使用了 Qt 的翻译机制，这使得界面的多语言支持更加容易实现。
+        这种方法通常用于国际化应用程序，以便于在不同语言环境下自动切换界面文本。'''
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         MainWindow.setProperty("setWindowFlags", _translate("MainWindow", "QtCore.Qt.FramelessWindowHint"))

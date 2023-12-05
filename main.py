@@ -280,7 +280,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             elif self.start_type == 'cam':
                 # 开启线程，否则界面会卡死
-                self.t1 = threading.Thread(target=self.start_video, args=(self.cam,))
+                self.t1 = threading.Thread(target=self.start_video_cam, args=(self.cam,))
                 # 启动线程
                 self.t1.start()
 
@@ -315,6 +315,36 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.show_frame(self.img)
             # 进行识别和显示
             self.det_OCR_show()
+
+    def start_video_cam(self, path):
+        cap = cv2.VideoCapture(path)
+        if not cap.isOpened():
+            raise ValueError("Unable to open video file or cam")
+        
+        if path == 0:
+            self.img_path = 'camera'
+        else:
+            self.img_path = path
+
+        last_time = time.time()  # 初始化上一次记录的时间
+
+        while True:
+            ret, self.img = cap.read()
+            if not ret or self.start_type is None:
+                break
+
+            current_time = time.time()
+            # 检查是否已经过去了10秒
+            if current_time - last_time >= 2:
+                # 显示原图
+                self.show_frame(self.img)
+                # 进行识别和显示
+                self.det_OCR_show()
+
+                last_time = current_time  # 更新上一次记录的时间
+
+            # 短暂的延时以减少CPU负担
+            time.sleep(0.1)
 
     def writexls(self, DATA, path):
         wb = xlwt.Workbook()
