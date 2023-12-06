@@ -29,6 +29,7 @@ import threading
 
 from Licence_plate_recognition_model.yolo import YOLOX_infer
 from Licence_plate_recognition_model.ultralytics.inferer import YOLOV8_infer
+from Database import Database
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -36,7 +37,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.RowLength = 0
-        self.Data = [['序号', '图片名称', '录入时间', '车牌号码', '车牌类型', '车牌位置', '置信度', '车牌信息']]
+        self.Data = [['序号', '图片名称', '录入时间', '车牌号码', '车牌类型', '车牌位置', '置信度', '车牌信息', '车辆状态']]
         self.number = 1
         self.img_dirs_name = None
         self.start_type = None
@@ -47,6 +48,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.img_path_dir = None
         self.video_path = None
         self.cam = None
+        self.db = Database()
 
         self.output_dir = './output'
         if not os.path.exists(self.output_dir):
@@ -107,16 +109,19 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             lpr_res = self.LPR_infer(self.img, yolo_res)
             if len(lpr_res) > 0:
                 for result in lpr_res:
+
                     self.Data.append(
                         [self.number, self.img_path, result['InputTime'], result['Number'], result['Type'],
-                         str(result['location']), str(result['Conf']), result['From']])
+                         str(result['location']), str(result['Conf']), result['From'], result['State']])
                     # 显示识别信息
                     self.__show(result, self.img_path, img_res)
                     self.number += 1
+                    
             # else:
             #     QMessageBox.warning(None, "Error", "无法识别此图像！", QMessageBox.Yes)
-        except:
-            pass
+        except Exception as e:
+            print("Error in det_OCR_show:", e)
+
 
     def open_dir(self):
         self.img_path_dir = QFileDialog.getExistingDirectory(None, "选择文件夹")
@@ -207,6 +212,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         lst_result = []
         # 根据yolox结果进行切图
         for res in yolo_res:
+            States = self.db.read_from_file()
             dic_LP = {}
             LP_color = res[0]
             LP_conf = res[1]
@@ -258,6 +264,16 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                 except:
                     pass
 
+            found = False
+            for State in States:
+                if State.number == LP_num:
+                    dic_LP['State'] = '准许入内'
+                    found = True
+                    break
+            if not found:
+                dic_LP['State'] = '禁止入内'
+
+            
         return lst_result
 
     def start(self):
@@ -335,7 +351,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             current_time = time.time()
             # 检查是否已经过去了10秒
-            if current_time - last_time >= 2:
+            if current_time - last_time >= 5:
                 # 显示原图
                 self.show_frame(self.img)
                 # 进行识别和显示
@@ -435,7 +451,23 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             # 设置字体颜色
             item.setForeground(QColor.fromRgb(197, 223, 250))
             self.tableWidget_info.setItem(self.RowLength - 1, 7, item)
-
+            item = QtWidgets.QTableWidgetItem(str(result['State']))
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+             # 设置字体颜色
+            item.setForeground(QColor.fromRgb(197, 223, 250))
+            self.tableWidget_info.setItem(self.RowLength - 1, 8, item)
+            ''''''  
+            if result['State'] == '准许入内':
+                self.tableWidget_info.item(self.RowLength - 1, 8).setBackground(QBrush(QColor(255, 0, 0)))
+                self.tableWidget_info.item(self.RowLength - 1, 8).setForeground(QColor(0, 0, 0))
+            elif result['State'] == '禁止入内':
+                self.tableWidget_info.item(self.RowLength - 1, 8).setBackground(QBrush(QColor(0, 255, 0)))
+                self.tableWidget_info.item(self.RowLength - 1, 8).setForeground(QColor(0, 0, 0))
+              
+            item = QtWidgets.QTableWidgetItem(str(result['State']))
+            # 居中
+            item.setTextAlignment(QtCore.Qt.AlignCenter)
+           
             # 显示识别到的车牌位置
             size = (int(self.label_26.width() - 10), int(self.label_26.height() - 10))
             shrink = cv2.resize(result['Picture'], size, interpolation=cv2.INTER_AREA)
