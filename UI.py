@@ -196,7 +196,7 @@ class Ui_MainWindow(object):
         self.pushButton_input = QtWidgets.QPushButton(self.frame_menu)
         # 设置 export 按钮的几何位置和大小、
         # 导出数据
-        self.pushButton_input.setGeometry(QtCore.QRect(150, 830, 131, 31))
+        self.pushButton_input.setGeometry(QtCore.QRect(80, 830, 131, 31))
         # 创建一个字体对象
         font = QtGui.QFont()
         # 设置字体为黑体
@@ -211,9 +211,29 @@ class Ui_MainWindow(object):
         self.pushButton_input.setFont(font)
         # 应用之前定义的按钮样式到 export 按钮
         self.pushButton_input.setStyleSheet(button_style)
-
         # 设置 export 按钮的对象名称
         self.pushButton_input.setObjectName("pushButton_input")
+
+        self.pushButton_delete = QtWidgets.QPushButton(self.frame_menu)
+        # 设置 export 按钮的几何位置和大小、
+        # 导出数据
+        self.pushButton_delete.setGeometry(QtCore.QRect(230, 830, 131, 31))
+        # 创建一个字体对象
+        font = QtGui.QFont()
+        # 设置字体为黑体
+        font.setFamily("黑体")
+        # 设置字体大小
+        font.setPointSize(11)
+        # 设置字体加粗
+        font.setBold(True)
+        # 设置字体权重
+        font.setWeight(75)
+        # 设置 export 按钮的字体
+        self.pushButton_delete.setFont(font)
+        # 应用之前定义的按钮样式到 export 按钮
+        self.pushButton_delete.setStyleSheet(button_style)
+        # 设置 export 按钮的对象名称
+        self.pushButton_delete.setObjectName("pushButton_delete")
 
         # 创建一个标签，用于显示图片
         self.label_10 = QtWidgets.QLabel(self.frame_menu)
@@ -922,6 +942,7 @@ class Ui_MainWindow(object):
         self.pushButton_start.setText(_translate("MainWindow", "开始运行 >"))
         self.pushButton_export.setText(_translate("MainWindow", "导出数据 >"))
         self.pushButton_input.setText(_translate("MainWindow", "录入数据 >"))
+        self.pushButton_delete.setText(_translate("MainWindow", "删除数据 >"))
         self.label.setText(_translate("MainWindow", " 选择车牌文件夹"))
         self.label_3.setText(_translate("MainWindow", " 选择车牌图片文件"))
         self.label_2.setText(_translate("MainWindow", " 选择车牌视频文件"))

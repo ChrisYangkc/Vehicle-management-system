@@ -31,7 +31,7 @@ from Licence_plate_recognition_model.yolo import YOLOX_infer
 from Licence_plate_recognition_model.ultralytics.inferer import YOLOV8_infer
 from Database import Database
 from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
-
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel
 class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -51,6 +51,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.cam = None
         self.db = Database()
         self.input_dialog = InputDialog(self.db)
+        self.delete_dialog = DeleteDialog(self.db)
 
         self.output_dir = './output'
         if not os.path.exists(self.output_dir):
@@ -74,10 +75,15 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.tableWidget_info.cellClicked.connect(self.cell_clicked)
         # 将一个按钮的点击事件绑定到 show_input_dialog 方法
         self.pushButton_input.clicked.connect(self.show_input_dialog)
+        # 将一个按钮的点击事件绑定到 show_delete_dialog 方法
+        self.pushButton_delete.clicked.connect(self.show_delete_dialog)
 
 
     def show_input_dialog(self):
         self.input_dialog.show()
+
+    def show_delete_dialog(self):
+        self.delete_dialog.show()
 
     # 连接单元格点击事件
     def cell_clicked(self, row, column):
@@ -496,26 +502,43 @@ class InputDialog(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("输入车牌号码")
-        layout = QVBoxLayout()
+        self.setWindowTitle("录入车牌号码")
+        self.setFixedSize(260, 170)  # 设置窗口尺寸为500x400
 
+        main_layout = QVBoxLayout()
+
+        # 创建车牌号码输入区域
+        plate_number_layout = QVBoxLayout()
+        plate_number_label = QLabel("车牌号码：")
         self.plate_number_input = QLineEdit(self)
-        self.plate_number_input.setPlaceholderText("车牌号码")
-        layout.addWidget(self.plate_number_input)
+        self.plate_number_input.setPlaceholderText("请输入车牌号码")
+        plate_number_layout.addWidget(plate_number_label)
+        plate_number_layout.addWidget(self.plate_number_input)
 
+        # 创建号码确认输入区域
+        plate_number_confirm_layout = QVBoxLayout()
+        plate_number_confirm_label = QLabel("号码确认：")
         self.plate_number_confirm_input = QLineEdit(self)
-        self.plate_number_confirm_input.setPlaceholderText("号码确认")
-        layout.addWidget(self.plate_number_confirm_input)
+        self.plate_number_confirm_input.setPlaceholderText("请再次输入车牌号码")
+        plate_number_confirm_layout.addWidget(plate_number_confirm_label)
+        plate_number_confirm_layout.addWidget(self.plate_number_confirm_input)
 
+        # 创建按钮区域
+        buttons_layout = QHBoxLayout()
         self.confirm_button = QPushButton("确认", self)
         self.confirm_button.clicked.connect(self.confirm)
-        layout.addWidget(self.confirm_button)
-
         self.cancel_button = QPushButton("取消", self)
         self.cancel_button.clicked.connect(self.close)
-        layout.addWidget(self.cancel_button)
+        buttons_layout.addWidget(self.confirm_button)
+        buttons_layout.addWidget(self.cancel_button)
 
-        self.setLayout(layout)
+        # 将布局添加到主布局
+        main_layout.addLayout(plate_number_layout)
+        main_layout.addLayout(plate_number_confirm_layout)
+        main_layout.addLayout(buttons_layout)
+
+        self.setLayout(main_layout)
+
 
     def confirm(self):
         plate_number = self.plate_number_input.text()
@@ -531,11 +554,96 @@ class InputDialog(QWidget):
             QMessageBox.warning(self, "错误", "车牌号码不能为空！", QMessageBox.Ok)
             return
 
-        # 将车牌号码写入数据库
-        self.db.write_to_file(plate_number)
+        # 读取当前数据库中的数据
+        existing_data = self.db.read_from_file()
+        # 将新车牌号添加到列表中
+        if not isinstance(existing_data, list):
+            existing_data = [] if existing_data == "" else [existing_data]
+
+        # 将新车牌号添加到列表中
+        existing_data.append(plate_number)
+        # 将更新后的数据列表写入数据库
+        self.db.write_to_file(existing_data)
         QMessageBox.information(self, "成功", "车牌号码已保存！", QMessageBox.Ok)
         self.close()
 
+class DeleteDialog(QWidget):
+    def __init__(self, db):
+        super().__init__()
+        self.db = db
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("录入车牌号码")
+        self.setFixedSize(260, 170)  # 设置窗口尺寸为500x400
+
+        main_layout = QVBoxLayout()
+
+        # 创建车牌号码输入区域
+        plate_number_layout = QVBoxLayout()
+        plate_number_label = QLabel("车牌号码：")
+        self.plate_number_input = QLineEdit(self)
+        self.plate_number_input.setPlaceholderText("请输入车牌号码")
+        plate_number_layout.addWidget(plate_number_label)
+        plate_number_layout.addWidget(self.plate_number_input)
+
+        # 创建号码确认输入区域
+        plate_number_confirm_layout = QVBoxLayout()
+        plate_number_confirm_label = QLabel("号码确认：")
+        self.plate_number_confirm_input = QLineEdit(self)
+        self.plate_number_confirm_input.setPlaceholderText("请再次输入车牌号码")
+        plate_number_confirm_layout.addWidget(plate_number_confirm_label)
+        plate_number_confirm_layout.addWidget(self.plate_number_confirm_input)
+
+        # 创建按钮区域
+        buttons_layout = QHBoxLayout()
+        self.confirm_button = QPushButton("确认", self)
+        self.confirm_button.clicked.connect(self.confirm)
+        self.cancel_button = QPushButton("取消", self)
+        self.cancel_button.clicked.connect(self.close)
+        buttons_layout.addWidget(self.confirm_button)
+        buttons_layout.addWidget(self.cancel_button)
+
+        # 将布局添加到主布局
+        main_layout.addLayout(plate_number_layout)
+        main_layout.addLayout(plate_number_confirm_layout)
+        main_layout.addLayout(buttons_layout)
+
+        self.setLayout(main_layout)
+
+
+    def confirm(self):
+        plate_number = self.plate_number_input.text()
+        plate_number_confirm = self.plate_number_confirm_input.text()
+
+        if plate_number != plate_number_confirm:
+            QMessageBox.warning(self, "错误", "两次车牌号需相同！", QMessageBox.Ok)
+            self.plate_number_input.clear()
+            self.plate_number_confirm_input.clear()
+            return
+
+        if not plate_number:
+            QMessageBox.warning(self, "错误", "车牌号码不能为空！", QMessageBox.Ok)
+            return
+
+        # 读取当前数据库中的数据
+        existing_data = self.db.read_from_file()
+        # 转换为列表格式
+        if not isinstance(existing_data, list):
+            existing_data = [] if existing_data == "" else [existing_data]
+
+        # 如果车牌号码存在于列表中，则从列表中移除
+        if plate_number in existing_data:
+            existing_data.remove(plate_number)
+            # 将更新后的数据列表写入数据库
+            self.db.write_to_file(existing_data)
+            QMessageBox.information(self, "成功", "车牌号码已从文件中移除！", QMessageBox.Ok)
+        else:
+            QMessageBox.warning(self, "错误", "车牌号码不存在于文件中！", QMessageBox.Ok)
+            self.plate_number_input.clear()
+            self.plate_number_confirm_input.clear()
+
+        self.close()
 
 if __name__ == "__main__":
     # 检测模型 可以取值 yolov8、yolov8_SE、yolox
