@@ -30,6 +30,7 @@ import threading
 from Licence_plate_recognition_model.yolo import YOLOX_infer
 from Licence_plate_recognition_model.ultralytics.inferer import YOLOV8_infer
 from Database import Database
+from PyQt5.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
 
 class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -49,6 +50,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.video_path = None
         self.cam = None
         self.db = Database()
+        self.input_dialog = InputDialog(self.db)
 
         self.output_dir = './output'
         if not os.path.exists(self.output_dir):
@@ -70,6 +72,12 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_export.clicked.connect(self.writeFiles)
         # 表格点击事件绑定
         self.tableWidget_info.cellClicked.connect(self.cell_clicked)
+        # 将一个按钮的点击事件绑定到 show_input_dialog 方法
+        self.pushButton_input.clicked.connect(self.show_input_dialog)
+
+
+    def show_input_dialog(self):
+        self.input_dialog.show()
 
     # 连接单元格点击事件
     def cell_clicked(self, row, column):
@@ -210,9 +218,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def LPR_infer(self, img_ori, yolo_res):
 
         lst_result = []
+        # 从数据库中读取已录入的车牌号码
+        registered_plates = self.db.read_from_file()
         # 根据yolox结果进行切图
         for res in yolo_res:
-            States = self.db.read_from_file()
             dic_LP = {}
             LP_color = res[0]
             LP_conf = res[1]
@@ -264,16 +273,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                 except:
                     pass
 
-            found = False
-            for State in States:
-                if State.number == LP_num:
-                    dic_LP['State'] = '准许入内'
-                    found = True
-                    break
-            if not found:
+            if LP_num in registered_plates:
+                dic_LP['State'] = '准许入内'
+            else:
                 dic_LP['State'] = '禁止入内'
 
-            
         return lst_result
 
     def start(self):
@@ -484,6 +488,53 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
         except Exception as e:
             print('rrr:', e)
+
+class InputDialog(QWidget):
+    def __init__(self, db):
+        super().__init__()
+        self.db = db
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("输入车牌号码")
+        layout = QVBoxLayout()
+
+        self.plate_number_input = QLineEdit(self)
+        self.plate_number_input.setPlaceholderText("车牌号码")
+        layout.addWidget(self.plate_number_input)
+
+        self.plate_number_confirm_input = QLineEdit(self)
+        self.plate_number_confirm_input.setPlaceholderText("号码确认")
+        layout.addWidget(self.plate_number_confirm_input)
+
+        self.confirm_button = QPushButton("确认", self)
+        self.confirm_button.clicked.connect(self.confirm)
+        layout.addWidget(self.confirm_button)
+
+        self.cancel_button = QPushButton("取消", self)
+        self.cancel_button.clicked.connect(self.close)
+        layout.addWidget(self.cancel_button)
+
+        self.setLayout(layout)
+
+    def confirm(self):
+        plate_number = self.plate_number_input.text()
+        plate_number_confirm = self.plate_number_confirm_input.text()
+
+        if plate_number != plate_number_confirm:
+            QMessageBox.warning(self, "错误", "两次车牌号需相同！", QMessageBox.Ok)
+            self.plate_number_input.clear()
+            self.plate_number_confirm_input.clear()
+            return
+
+        if not plate_number:
+            QMessageBox.warning(self, "错误", "车牌号码不能为空！", QMessageBox.Ok)
+            return
+
+        # 将车牌号码写入数据库
+        self.db.write_to_file(plate_number)
+        QMessageBox.information(self, "成功", "车牌号码已保存！", QMessageBox.Ok)
+        self.close()
 
 
 if __name__ == "__main__":
