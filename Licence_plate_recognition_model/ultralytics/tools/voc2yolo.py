@@ -9,10 +9,10 @@ import xml.etree.ElementTree as ET
 # 训练格式的数据集
 ########################################################################
 # VOC数据集路径
-voc_ann_path = r"D:\lg\BaiduSyncdisk\project\person_code\project_self\chepai_OCR\data\traindata\VOC_LP_det\Annotations"
-voc_img_path = r"D:\lg\BaiduSyncdisk\project\person_code\project_self\chepai_OCR\data\traindata\VOC_LP_det\JPEGImages"
+voc_ann_path = r"D:\Bishe_Program\Licence_plate_recognition_model\traindata\train\Annotations"
+voc_img_path = r"D:\Bishe_Program\Licence_plate_recognition_model\traindata\train\JPEGImages"
 # YOLO数据集路径
-yolo_out_path = r"D:\lg\BaiduSyncdisk\project\person_code\project_self\chepai_OCR\data\traindata\yolo"
+yolo_out_path = r"D:\Bishe_Program\Licence_plate_recognition_model\traindata\yolov8"
 
 train_img_path = os.path.join(yolo_out_path, 'train', 'images', 'train')
 train_labels_path = train_img_path.replace('images', 'labels')
