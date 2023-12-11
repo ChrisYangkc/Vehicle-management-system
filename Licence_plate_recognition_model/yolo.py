@@ -7,7 +7,9 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
-from Licence_plate_recognition_model import DeepSort
+
+# from Licence_plate_recognition_model.yolox_deepsort.deep_sort.deep_sort import DeepSort
+
 from Licence_plate_recognition_model.dataset.data_predict import ImagePreprocessor
 from Licence_plate_recognition_model.nets.yolo import YoloX
 from Licence_plate_recognition_model.utils.utils import get_classes, show_config
@@ -17,9 +19,9 @@ from Licence_plate_recognition_model.utils.utils_bbox import decode_outputs, non
 class YOLOX_infer(object):
 
     def __init__(self, model_path, classes_path, input_shape, phi, confidence, nms_iou, cuda):
-
-        self.tracker = DeepSort(model_path=r"D:\Bishe_Program\Licence_plate_recognition_model\deep_sort_pytorch\deep_sort\deep\original_model.py")
-
+        '''
+        self.tracker = DeepSort(model_path=r"D:\Bishe_Program\Licence_plate_recognition_model\yolox_deepsort\weigth\yolox_s.pth")
+        '''
         self.model_path = model_path
         self.classes_path = classes_path
         # 输入图片的大小，必须为32的倍数。 格式为： [h, w]
@@ -84,13 +86,13 @@ class YOLOX_infer(object):
             top_label = np.array(results[0][:, 6], dtype='int32')
             top_conf = results[0][:, 4] * results[0][:, 5]
             top_boxes = results[0][:, :4]
-
+        '''
         # 使用 DeepSORT 进行跟踪
         bboxes = np.array([box[:4] for box in top_boxes]) # DeepSORT 需要的格式
         confidences = np.array([score for score in top_conf])
         classes = np.array([label for label in top_label])
         tracks = self.tracker.update(bboxes, confidences, classes, image)
-
+        '''
         lst_result = []
         for i, c in list(enumerate(top_label)):
             label = self.class_names[int(c)]

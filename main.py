@@ -661,7 +661,7 @@ if __name__ == "__main__":
     lpr_size = [94, 24]
     # 目标检测模型初始化
     if yolo_model in ['yolov8', 'yolov8_SE']:
-        yolo = YOLOV8_infer(yolov8_weights, cuda, False)
+        yolo = YOLOV8_infer(yolov8_weights, 'cpu', False)
     elif yolo_model == 'yolox':
         yolo = YOLOX_infer(model_path=yolox_weight, classes_path=classes_path, input_shape=input_shape,
                             phi=phi, confidence=confidence, nms_iou=nms_iou, cuda=cuda)
