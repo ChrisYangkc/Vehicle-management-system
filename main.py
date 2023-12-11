@@ -363,7 +363,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             current_time = time.time()
             # 检查是否已经过去了10秒
-            if current_time - last_time >= 3:
+            if current_time - last_time >= 0.01:
                 # 显示原图
                 self.show_frame(self.img)
                 # 进行识别和显示
@@ -645,7 +645,7 @@ class DeleteDialog(QWidget):
 
 if __name__ == "__main__":
     # 检测模型 可以取值 yolov8、yolov8_SE、yolox
-    yolo_model = 'yolov8'
+    yolo_model = 'yolox'
     yolox_weight = r"D:/Bishe_Program/Licence_plate_recognition_model/weigth/best_epoch_weights.pth"
     # 可更换同yolv8相关的模型，包括基于yolov8修改的
     yolov8_weights = 'weights/yolov8/weights/best.pt'
