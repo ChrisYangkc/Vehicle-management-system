@@ -19,9 +19,7 @@ from Licence_plate_recognition_model.utils.utils_bbox import decode_outputs, non
 class YOLOX_infer(object):
 
     def __init__(self, model_path, classes_path, input_shape, phi, confidence, nms_iou, cuda):
-        '''
-        self.tracker = DeepSort(model_path=r"D:\Bishe_Program\Licence_plate_recognition_model\yolox_deepsort\weigth\yolox_s.pth")
-        '''
+        
         self.model_path = model_path
         self.classes_path = classes_path
         # 输入图片的大小，必须为32的倍数。 格式为： [h, w]

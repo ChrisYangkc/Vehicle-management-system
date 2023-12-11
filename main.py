@@ -658,10 +658,11 @@ if __name__ == "__main__":
     nms_iou = 0.3
     letterbox_image = True
     cuda = 'cuda:0'
+
     lpr_size = [94, 24]
     # 目标检测模型初始化
     if yolo_model in ['yolov8', 'yolov8_SE']:
-        yolo = YOLOV8_infer(yolov8_weights, 'cpu', False)
+        yolo = YOLOV8_infer(yolov8_weights, cuda, False)
     elif yolo_model == 'yolox':
         yolo = YOLOX_infer(model_path=yolox_weight, classes_path=classes_path, input_shape=input_shape,
                             phi=phi, confidence=confidence, nms_iou=nms_iou, cuda=cuda)
@@ -672,7 +673,7 @@ if __name__ == "__main__":
     lprnet = LPRNet(lpr_max_len=8, class_num=len(CHARS), dropout_rate=0)
     device = torch.device(cuda)
     # 模型初始化
-    lprnet.load_state_dict(torch.load(lpr_weights))
+    lprnet.load_state_dict(torch.load(lpr_weights))#, map_location='cpu'
     lprnet = lprnet.eval()
     lprnet.to(device)
 
