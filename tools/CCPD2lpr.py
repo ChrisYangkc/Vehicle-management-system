@@ -2,15 +2,6 @@
 import cv2
 import os
 
-'''
-1. 此种转换有缺点：
-    CCPD车牌有重复，应该是不同角度或者模糊程度，重复的车牌，命名一样，会冲掉
-    
-2. 支持绿牌，蓝牌数据集制作
-'''
-
-
-
 roi_path = r'../ccpd_data'
 save_path = r'../LicensePlate_OCR/lpr_net/traindata/train/blue'
 

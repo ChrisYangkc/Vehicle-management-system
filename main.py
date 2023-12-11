@@ -475,10 +475,6 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             elif result['State'] == '禁止入内':
                 self.tableWidget_info.item(self.RowLength - 1, 8).setBackground(QBrush(QColor(0, 255, 0)))
                 self.tableWidget_info.item(self.RowLength - 1, 8).setForeground(QColor(0, 0, 0))
-              
-            item = QtWidgets.QTableWidgetItem(str(result['State']))
-            # 居中
-            item.setTextAlignment(QtCore.Qt.AlignCenter)
            
             # 显示识别到的车牌位置
             size = (int(self.label_26.width() - 10), int(self.label_26.height() - 10))
