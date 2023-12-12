@@ -817,61 +817,6 @@ class Ui_MainWindow(object):
         # 设置 label_11 的对象名称
         self.label_11.setObjectName("label_11")
 
-
-        '''
-        self.label_csdn_blog = DraggableLabel(MainWindow)
-        self.label_csdn_blog.setGeometry(QtCore.QRect(400, 3, 50, 37))
-        self.label_csdn_blog.setPixmap(QtGui.QPixmap("icon/CSDN.png"))
-        self.label_csdn_blog.setOpenExternalLinks(True)  # 允许打开外部链接
-        self.label_csdn_blog.setCursor(Qt.PointingHandCursor)  # 更改光标样式
-        self.label_csdn_blog.setStyleSheet("background-color: rgb(74, 160, 245);")
-        # 设置网址超链接
-        url_blog = QUrl("https://blog.csdn.net/qq_28949847/article/details/130597656")
-        self.label_csdn_blog.setToolTip(url_blog.toString())
-        # 博客点击
-        self.label_csdn_blog.mousePressEvent = lambda event: self.open_url(
-           url_blog) if event.button() == Qt.LeftButton else None
-        #
-        self.label_csdn_all = DraggableLabel(MainWindow)
-        self.label_csdn_all.setGeometry(QtCore.QRect(450, 0, 50, 40))
-        self.label_csdn_all.setPixmap(QtGui.QPixmap("icon/cam.png"))
-        self.label_csdn_all.setOpenExternalLinks(True)  # 允许打开外部链接
-        self.label_csdn_all.setCursor(Qt.PointingHandCursor)  # 更改光标样式
-        self.label_csdn_all.setStyleSheet("background-color: rgb(74, 160, 245);")
-        # # # 设置网址超链接
-        url_all = QUrl("https://blog.csdn.net/qq_28949847/article/details/128552785")
-        self.label_csdn_all.setToolTip(url_all.toString())
-        # 博客点击
-        self.label_csdn_all.mousePressEvent = lambda event: self.open_url(
-            url_all) if event.button() == Qt.LeftButton else None
-
-        
-        self.label_csdn_mbd = DraggableLabel(MainWindow)
-        self.label_csdn_mbd.setGeometry(QtCore.QRect(450, 0, 50, 40))
-        self.label_csdn_mbd.setPixmap(QtGui.QPixmap("icon/MBD.png"))
-        self.label_csdn_mbd.setOpenExternalLinks(True)  # 允许打开外部链接
-        self.label_csdn_mbd.setCursor(Qt.PointingHandCursor)  # 更改光标样式
-        self.label_csdn_mbd.setStyleSheet("background-color: rgb(74, 160, 245);")
-        # 设置网址超链接
-        url_mbd = QUrl("https://mbd.pub/o/author-cGeYm2xm/work")
-        self.label_csdn_mbd.setToolTip(url_mbd.toString())
-        # 博客点击
-        self.label_csdn_mbd.mousePressEvent = lambda event: self.open_url(
-            url_mbd) if event.button() == Qt.LeftButton else None
-
-        self.label_csdn_csdn_project = DraggableLabel(MainWindow)
-        self.label_csdn_csdn_project.setGeometry(QtCore.QRect(500, 0, 50, 40))
-        self.label_csdn_csdn_project.setPixmap(QtGui.QPixmap("icon/TB1.png"))
-        self.label_csdn_csdn_project.setOpenExternalLinks(True)  # 允许打开外部链接
-        self.label_csdn_csdn_project.setCursor(Qt.PointingHandCursor)  # 更改光标样式
-        self.label_csdn_csdn_project.setStyleSheet("background-color: rgb(74, 160, 245);")
-        # 设置网址超链接
-        url_p = QUrl("https://blog.csdn.net/qq_28949847/category_12366752.html")
-        self.label_csdn_csdn_project.setToolTip(url_p.toString())
-        # 博客点击
-        self.label_csdn_csdn_project.mousePressEvent = lambda event: self.open_url(
-            url_p) if event.button() == Qt.LeftButton else None
-        '''
         # 创建一个名为 toolButton_exit 的工具按钮
         self.toolButton_exit = QtWidgets.QToolButton(self.centralwidget)
         # 设置工具按钮的几何位置和大小
@@ -973,6 +918,7 @@ class Ui_MainWindow(object):
         self.toolButton_exit.setText(_translate("MainWindow", "..."))
         self.toolButton_2.setText(_translate("MainWindow", "..."))
         self.toolButton_3.setText(_translate("MainWindow", "..."))
+
 
 
 if __name__ == "__main__":

@@ -501,7 +501,7 @@ class InputDialog(QWidget):
 
     def initUI(self):
         self.setWindowTitle("录入车牌号码")
-        self.setFixedSize(260, 170)  # 设置窗口尺寸为500x400
+        self.setFixedSize(350, 200)  # 设置窗口尺寸为500x400
 
         main_layout = QVBoxLayout()
 
@@ -569,11 +569,11 @@ class DeleteDialog(QWidget):
     def __init__(self, db):
         super().__init__()
         self.db = db
-        self.initUI()
+        self.deleteUI()
 
-    def initUI(self):
-        self.setWindowTitle("录入车牌号码")
-        self.setFixedSize(260, 170)  # 设置窗口尺寸为500x400
+    def deleteUI(self):
+        self.setWindowTitle("删除车牌号码")
+        self.setFixedSize(350, 200)  # 设置窗口尺寸为500x400
 
         main_layout = QVBoxLayout()
 
