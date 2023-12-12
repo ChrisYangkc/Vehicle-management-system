@@ -196,7 +196,7 @@ class Ui_MainWindow(object):
         self.pushButton_input = QtWidgets.QPushButton(self.frame_menu)
         # 设置 export 按钮的几何位置和大小、
         # 导出数据
-        self.pushButton_input.setGeometry(QtCore.QRect(80, 830, 131, 31))
+        self.pushButton_input.setGeometry(QtCore.QRect(80, 830, 131, 32))
         # 创建一个字体对象
         font = QtGui.QFont()
         # 设置字体为黑体
@@ -217,7 +217,7 @@ class Ui_MainWindow(object):
         self.pushButton_delete = QtWidgets.QPushButton(self.frame_menu)
         # 设置 export 按钮的几何位置和大小、
         # 导出数据
-        self.pushButton_delete.setGeometry(QtCore.QRect(230, 830, 131, 31))
+        self.pushButton_delete.setGeometry(QtCore.QRect(230, 830, 131, 32))
         # 创建一个字体对象
         font = QtGui.QFont()
         # 设置字体为黑体
@@ -689,13 +689,13 @@ class Ui_MainWindow(object):
         self.tableWidget_info.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_info.setHorizontalHeaderItem(5, item)
-        self.tableWidget_info.setColumnWidth(5, 180)
+        self.tableWidget_info.setColumnWidth(5, 130)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_info.setHorizontalHeaderItem(6, item)
         self.tableWidget_info.setColumnWidth(6, 80)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_info.setHorizontalHeaderItem(7, item)
-        self.tableWidget_info.setColumnWidth(7, 150)
+        self.tableWidget_info.setColumnWidth(7, 200)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_info.setHorizontalHeaderItem(8, item)
         self.tableWidget_info.setColumnWidth(8, 150)

@@ -493,6 +493,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         except Exception as e:
             print('rrr:', e)
 
+
 class InputDialog(QWidget):
     def __init__(self, db):
         super().__init__()
