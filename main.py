@@ -651,7 +651,7 @@ if __name__ == "__main__":
     # 可更换同yolv8相关的模型，包括基于yolov8修改的
     yolov8_weights = 'weights/yolov8/weights/best.pt'
     # yolov8_weights = 'weights/yolov8s-attention-SE/weights/best.pt'
-    lpr_weights = r"D:/Bishe_Program/Licence_plate_detection_model/runs/best.pth"
+    lpr_weights = r"D:/Bishe_Program/Licence_plate_detection_model/runs/best_0977.pth"
     classes_path = r"D:/Bishe_Program/Licence_plate_recognition_model/model_data/self_classes.txt"
     input_shape = [640, 640]
     phi = 's'
