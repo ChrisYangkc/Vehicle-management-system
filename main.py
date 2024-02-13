@@ -26,7 +26,7 @@ import sys, os, xlwt
 import numpy as np
 from PIL import Image
 import threading
-
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 from Licence_plate_recognition_model.yolo import YOLOX_infer
 from Licence_plate_recognition_model.ultralytics.inferer import YOLOV8_infer
 from Database import Database
@@ -249,7 +249,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             img = torch.from_numpy(img)
             img = img.unsqueeze(0)
-            img = Variable(img.cuda())
+            img = Variable(img.cuda())#.cuda()
             prebs = lprnet(img)
             prebs = prebs.cpu().detach().numpy()
 
